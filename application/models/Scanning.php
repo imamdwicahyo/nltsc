@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Analisis extends CI_Model{
+class Scanning extends CI_Model{
 
   public function __construct()
   {
@@ -9,16 +9,28 @@ class Analisis extends CI_Model{
     //Codeigniter : Write Less Do More
   }
 
-  public function scanning($text){
+  public function process($text){
     $resultScanning = [];
 
     //menambahkan spasi sebelum dan sesudah tanda baca
     $tandaBacaLama = array('. ', ', ');
     $tandaBacaBaru = array(' . ', ' , ');
     $text = str_replace($tandaBacaLama, $tandaBacaBaru, $text);
+    $tandaBacaLama = array('.', ',');
+    $tandaBacaBaru = array(' . ', ' , ');
+    $text = str_replace($tandaBacaLama, $tandaBacaBaru, $text);
 
     //memecah teks yang dibatasi oleh spasi
     $listKata = explode(" ", $text);
+
+    //menggabungkan nilai yang diapit oleh koma (bilangan desimal)
+    foreach ($listKata as $id => $value) {
+        if ($value == ',' && is_numeric($listKata[$id-1]) && is_numeric($listKata[$id+1])) {
+            $listKata[$id] = $listKata[$id-1].$listKata[$id].$listKata[$id+1];
+            $listKata[$id-1] = "";
+            $listKata[$id+1] = "";
+        }
+    }
 
     //mengambil token
     $tokenArithmeticOperator = $this->getTokenByClass('ArithmeticOperator');
@@ -28,9 +40,9 @@ class Analisis extends CI_Model{
 
     //mendapatkan token variabel
     $tokenVariables = [];
-    foreach ($listKata as $key => $value) {
+    foreach ($listKata as $id => $value) {
         if ($value == 'variabel' || $value == 'var') {
-            $i = $key;
+            $i = $id;
             while ($listKata[$i]!="" && $listKata[$i] != '.' && $i < 20) {
                 if ((in_array($listKata[$i], $tokenArithmeticOperator) == false) &&
                     (in_array($listKata[$i], $tokenKeyword) == false) &&
@@ -126,6 +138,7 @@ class Analisis extends CI_Model{
             }
         }
     }
+    
     return $resultScanning;
   }
 

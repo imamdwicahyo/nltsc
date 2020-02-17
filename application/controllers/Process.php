@@ -6,7 +6,9 @@ class Process extends CI_Controller{
   public function __construct()
   {
     parent::__construct();
-    $this->load->model(array('Prepocessing','Analisis'));
+    $this->load->model(array('Prepocessing',
+                             'Scanning',
+                             'Parsing'));
     //Codeigniter : Write Less Do More
   }
 
@@ -14,11 +16,14 @@ class Process extends CI_Controller{
   {
     //inisialisasi
     $prepocessing = $this->Prepocessing;
-    $analisis = $this->Analisis;
+    $scanning = $this->Scanning;
+    $parsing = $this->Parsing;
 
     //input text
     $input = "Buat aplikasi uji1. buat variabel a dan i dengan tipe data
-              bilangan bulat. untuk i sama dengan 1,5 sampai 10 maka tampilkan imam dwi cahyo.?";
+              bilangan bulat. untuk i sama dengan 1,5 sampai 10 maka tampilkan imam dwi cahyo. ";
+    $input = "Buat aplikasi";
+
 
     //menggunakan fungsi casefolding untuk mendapatkan teks dengan huruf kecil
     $casefolding = $prepocessing->casefolding($input);
@@ -27,7 +32,10 @@ class Process extends CI_Controller{
     $filtering = $prepocessing->filtering($casefolding,"/[^A-Za-z0-9\ \_\.\,\+\-]/");
 
     //menggunakan fungsi scanning untuk memecah text kedalah class
-    $scanning = $analisis->scanning($filtering);
+    $scanning = $scanning->process($filtering);
+
+    //menggunakan fungsi parser untuk mengecek urutan token
+    $parsing = $parsing->process($scanning);
   }
 
 }
