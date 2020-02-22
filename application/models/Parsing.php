@@ -32,7 +32,8 @@ class Parsing extends CI_Model{
             }
 
         }else{
-            array_push($tokenKata, $value['token']);
+            $str = preg_replace('/[ ]/', '#', $value['token']);
+            array_push($tokenKata, $str);
         }
     }
 
@@ -79,8 +80,8 @@ class Parsing extends CI_Model{
     list($endStack,$stack) = $this->inputCheck($endList,$stack,$listChild[$key]);
     $listStack = $this->addData($listStack,$stack,TRUE,$keyToken,"");
 
-    $countLoop = 0; $word="";
-    while ($diterima==0 AND $countLoop<$maxLoop AND count($listStack)>0 AND count($input)>0) {
+    $countLoop = 0; $word=""; $tempResult = [];
+    while ($diterima==0 AND $countLoop<$maxLoop AND count($listStack)>0 AND count($tokenKata)>0) {
       //mendapatkan key stack terakhir
       $endList = count($listStack)-1;
       $word="";
@@ -94,13 +95,6 @@ class Parsing extends CI_Model{
         //mengecek apakah stack terakhir punya child atau tidak (output bolean)
         $haveChild = $this->haveChild(end($stack),$grammarNL);
 
-        // if ($keyToken>=(count($input)-1) AND (count($stack) > 1)) {
-        //   //jika token habis tapi stack masih ada
-        //   //maka kembali ke track sebelumya yang belum di cek
-        //   array_pop($listStack);
-        //   $endList = count($listStack)-1;
-        //   $keyToken = $listStack[$endList]['key'];
-        //   $listStack[$endList]['action'] = "Checking success, deleting last stack (1)";
         if ($haveChild==TRUE) {
           //jika stack terakhir memiliki anak lakukan :
           $child = $this->getChild(end($stack),$grammarNL);
@@ -122,18 +116,18 @@ class Parsing extends CI_Model{
             foreach ($child as $key => $value) {
               $endStack = sizeof($stack)-1;
               list($tempEnd,$tempStack)=$this->inputCheck($endStack,$listStack[$endList]['child'],$value);
-              $listStack = $this->addData($listStack,$tempStack,TRUE,$keyToken,$input[$keyToken]['token']);
+              $listStack = $this->addData($listStack,$tempStack,TRUE,$keyToken,$tokenKata[$keyToken]);
             }
           }
         }else{
           //jika tidak memiliki child lakukan pengecekan
-          if ($input[$keyToken]['token'] == end($stack)) {
+          if ($tokenKata[$keyToken] == end($stack)) {
             // jika yang dicek sama
 
-            if ($keyToken==(count($input)-1) AND (count($stack) == 1)) {
+            if ($keyToken==(count($tokenKata)-1) AND (count($stack) == 1)) {
               //jika token dan stack habis maka string diterima
               $diterima=1;
-            }elseif ($keyToken==(count($input)-1) AND (count($stack) > 1) ) {
+            }elseif ($keyToken==(count($tokenKata)-1) AND (count($stack) > 1) ) {
               //jika token habis dan stack masih ada
               //maka hapus stack terakhir lalu cek stack sebelumya
               array_pop($listStack);
@@ -143,10 +137,11 @@ class Parsing extends CI_Model{
             }else {
               //juka token masih ada dan stack masih ada
               //maka lakukan ke pengecekan ke stack
-              $keyToken++; $word = $input[$keyToken]['token'];
+              $word = $tokenKata[$keyToken]; //ini tanda untuk memunculkan pesan
+              $keyToken++;
               array_pop($listStack[$endList]['child']);
               $listStack[$endList]['action'] = "Checking success, deleting last stack";
-              $listStack[$endList]['check']=$input[$keyToken]['token'];
+              $listStack[$endList]['check']=$tokenKata[$keyToken];
               $listStack[$endList]['key']=$listStack[$endList]['key']+1;
               $endStack=$endStack-1;
             }
@@ -178,15 +173,27 @@ class Parsing extends CI_Model{
       if ($pesan = TRUE) {
         if ($word!="") {
           $stringStack = "";
-          foreach ($stack as $key => $value) {
-            $stringStack = $stringStack.$value." ";
+          $numStack = count($stack)-1;
+          for ($i=$numStack; $i >= 0 ; $i--) {
+            $stringStack = $stringStack.$stack[$i]." ";
           }
+          foreach ($stack as $key => $value) {
+
+          }
+          if (($keyToken-1)>0) {
+            $word = $tempResult[$keyToken-2]['word']." ".$word;
+          }
+
           $temp = array(
             'word' => $word,
             'stack' => $stringStack,
           );
 
-          array_push($result,$temp);
+          $tempResult[$keyToken-1] = $temp;
+
+          if (count($tempResult) > count($result)) {
+            $result = $tempResult;
+          }
         }
       }
 
@@ -203,9 +210,14 @@ class Parsing extends CI_Model{
       'numLoop' => $countLoop,
       'maxLoop' => $maxLoop,
       'message' => $message,
-      'list'  => $result,
-      'result' => $listStack,
      );
+
+     if ($diterima==0) {
+       $key = count($result)-1;
+       $data['error_message'] = "Terdapat error setelah kata \"".$result[$key]['word']."\" yaitu pada kata \"".$tokenKata[$key+1]."\"";
+     }
+     $data['list']  = $result;
+     $data['result'] = $listStack;
 
     var_dump($data);
     // echo "$countLoop";

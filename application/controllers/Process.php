@@ -22,7 +22,7 @@ class Process extends CI_Controller{
     //input text
     $input = "Buat aplikasi uji1. buat variabel a dan i dengan tipe data
               bilangan bulat. untuk i sama dengan 1,5 sampai 10 maka tampilkan imam dwi cahyo. ";
-    $input = "BUAT program uji5. buat variabel i dengan tipe data integer. untuk iterasi 1 sampai 10 pada i maka tampilkan hitungan ke lalu tampilkan i.";
+    $input = "buat program uji50. buat variabel i dan j dengan tipe data integer. untuk iterasi 1 sampai 10 pada j maka ulangi tampilkan hello world kemudian i bernilai 1 tambah i sehingga i lebih besar 10. ";
 
 
     //menggunakan fungsi casefolding untuk mendapatkan teks dengan huruf kecil
