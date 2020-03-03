@@ -210,6 +210,7 @@ class Parsing extends CI_Model{
       'numLoop' => $countLoop,
       'maxLoop' => $maxLoop,
       'message' => $message,
+      'diterima' => $diterima,
      );
 
      if ($diterima==0) {
@@ -219,8 +220,7 @@ class Parsing extends CI_Model{
      $data['list']  = $result;
      $data['result'] = $listStack;
 
-    var_dump($data);
-    // echo "$countLoop";
+    return $data;
   }
 
   function addData($listStack,$tChild,$status,$key,$check){

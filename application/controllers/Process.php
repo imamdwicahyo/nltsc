@@ -8,7 +8,9 @@ class Process extends CI_Controller{
     parent::__construct();
     $this->load->model(array('Prepocessing',
                              'Scanning',
-                             'Parsing'));
+                             'Parsing',
+                             'Translation'
+                           ));
     //Codeigniter : Write Less Do More
   }
 
@@ -18,11 +20,14 @@ class Process extends CI_Controller{
     $prepocessing = $this->Prepocessing;
     $scanning = $this->Scanning;
     $parsing = $this->Parsing;
+    $translation = $this->Translation;
 
     //input text
     $input = "Buat aplikasi uji1. buat variabel a dan i dengan tipe data
               bilangan bulat. untuk i sama dengan 1,5 sampai 10 maka tampilkan imam dwi cahyo. ";
-    $input = "buat program uji50. buat variabel i dan j dengan tipe data integer. untuk iterasi 1 sampai 10 pada j maka ulangi tampilkan hello world kemudian i bernilai 1 tambah i sehingga i lebih besar 10. ";
+    // $input = "buat program uji50. buat variabel a dan i dengan tipe data
+    //           bilangan bulat. Tampilkan Imam. ";
+    // $input = "Buat aplikasi tampil_hasi_bagi. Tampilkan imam.";
 
 
     //menggunakan fungsi casefolding untuk mendapatkan teks dengan huruf kecil
@@ -36,6 +41,16 @@ class Process extends CI_Controller{
 
     //menggunakan fungsi parser untuk mengecek urutan token
     $parsing = $parsing->process($scanning);
+
+    if ($parsing['diterima']=='1') {
+      $cleanToken = $translation->removeAdditionalToken($scanning);
+
+      $changeToken = $translation->changeToken($cleanToken);
+
+      $shortToken = $translation->shortToken($changeToken);
+
+      $codeInsertion = $translation->codeInsertion($shortToken);
+    }
   }
 
 }
