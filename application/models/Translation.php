@@ -210,15 +210,15 @@ class Translation extends CI_Model{
   {
     //insisialisasi
     $diterima   = 0; //variabel status diterima/tidak
-    $endStack   = 0; //pointer untuk menyimpan stack terakhir
-    $endList    = 0; //
-    $endToken   = 0;
+    $endKeyStack   = 0; //pointer untuk menyimpan stack terakhir
+    $endKeyList    = 0; //pointer untuk menyimpan key liststack terakhir
+    $endResult   = 0;
     $stack      = [];
     $listStack  = [];
     $result     = [];
     $resultToken= [];
     $keyToken   = 0;
-    $maxLoop    = 10000;
+    $maxLoop    = 3145;
     $pesan      = TRUE;
 
     //mendapatkan clean token dan class
@@ -280,97 +280,108 @@ class Translation extends CI_Model{
 
     //memasukan stack pertama
     $key = array_search("START",$grammarParent);
-    list($endStack,$stack) = $this->inputCheck($endList,$stack,$grammarChild[$key]);
-    $listStack = $this->addData($listStack,$stack,TRUE,$keyToken,"",$endToken);
+    list($endKeyStack,$stack) = $this->inputCheck($endKeyList,$stack,$grammarChild[$key]);
+    $listStack = $this->addData($listStack,$stack,TRUE,$keyToken,"",$endResult);
 
     $countLoop = 0; $word=""; $tempResult = [];
     while ($diterima==0 AND $countLoop<$maxLoop AND count($listStack)>0 AND count($tokenKata)>0) {
-      //mendapatkan key stack terakhir
-      $endList = count($listStack)-1;
-      $word="";
+      $endKeyList = count($listStack)-1; //mendapatkan key List stack terakhir
+      $word=""; //inisialisasi
 
       // jika status ceknya true maka lakukan pengecekan
       // jika tidak maka kembali ke track sebelumya yang belum di cek
-      if ($listStack[$endList]['status']==TRUE) {
-        $stack = $listStack[$endList]['child']; //mendapatkan stack terakhir
-        $endStack = sizeof($stack)-1; //mendapatkan key stack
+      if ($listStack[$endKeyList]['status']==TRUE) {
+        $stack = $listStack[$endKeyList]['child']; //mendapatkan stack terakhir
+        $endKeyStack = sizeof($stack)-1; //mendapatkan key stack terakhir
 
-        //mengecek apakah stack terakhir punya child atau tidak (output bolean)
+        //pengecekan apakah stack terakhir punya child atau tidak (output bolean)
         $haveChild = $this->haveChild(end($stack),$grammarPascal);
+        if ($haveChild==TRUE) {//jika stack terakhir memiliki anak lakukan
 
-        if ($haveChild==TRUE) {
-          //jika stack terakhir memiliki anak lakukan :
           $child = $this->getChild(end($stack),$grammarPascal);
           $child = explode("|",$child);
 
           if (sizeof($child) == 1) {
-            //jika cuma ada 1 anak maka masukan ke stack
-            list($endStack,$listStack[$endList]['child'])=$this->inputCheck($endStack,$listStack[$endList]['child'],$child[0]);
-            $listStack[$endList]['action'] = "Added to stack";
+            //jika cuma ada 1 anak maka child masukan ke stack
+            list($endKeyStack,$listStack[$endKeyList]['child'])=$this->inputCheck($endKeyStack,$listStack[$endKeyList]['child'],$child[0]);
+            $listStack[$endKeyList]['action'] = "Added child from '".end($stack)."'";
           }else {
             //jika lebih dari 1 child
             //maka setiap child dibuatkan stack lalu masukan ke listStack
+            $listStack[$endKeyList]['status'] = false; //ubah status check false karena sudah di cek
 
-            $listStack[$endList]['status'] = false; //ubah status check false karena sudah di cek
             $countChild = sizeof($child); //mendapatkan banyaknya child
-            $listStack[$endList]['action'] = "Created new list stack ($countChild)";
+            $listStack[$endKeyList]['action'] = "Created new list stack ($countChild)";
 
             //lakukan perulangan sebanyak banyaknya child lalu buatkan stack lalu masukan kedalam listStack
             foreach (array_reverse($child,true) as $key => $value) {
-              $endStack = sizeof($stack)-1;
-              list($tempEnd,$tempStack)=$this->inputCheck($endStack,$listStack[$endList]['child'],$value);
-              $action = "new Stack parent = ".end($stack);
-              $listStack = $this->addData($listStack,$tempStack,TRUE,$keyToken,$tokenKata[$keyToken],$endToken,$action);
+              $endKeyStack = sizeof($stack)-1;
+              $action = "new Stack from parent = ".end($stack);
+
+              list($tempEnd,$tempStack)=$this->inputCheck($endKeyStack,$listStack[$endKeyList]['child'],$value);
+              $listStack = $this->addData($listStack,$tempStack,TRUE,$keyToken,$tokenKata[$keyToken],$endResult,$action);
             }
           }
-        }else{
-          //jika tidak memiliki child lakukan pengecekan
+        }else{//jika stack terakhir tidak memiliki child lakukan pengecekan
 
           if ($tokenKata[$keyToken] == preg_replace('/[#]/', ' ', end($stack))) {
             // jika yang dicek sama
 
             if ($keyToken==(count($tokenKata)-1) AND (count($stack) == 1)) {
               //jika token dan stack habis maka string diterima
-              $endToken = $listStack[$endList]['endToken'];
-              $resultToken[$endToken] = $tokenKata[$keyToken];
+              $resultToken[$endResult] = end($stack);
               $diterima=1;
             }elseif ($keyToken==(count($tokenKata)-1) AND (count($stack) > 1) ) {
               //jika token habis dan stack masih ada
               //maka hapus stack terakhir lalu cek stack sebelumya
               $word = $tokenKata[$keyToken]; //ini tanda untuk memunculkan pesan
-              array_push($resultToken,$tokenKata[$keyToken]);
-              array_pop($listStack[$endList]['child']);
-              $listStack[$endList]['action'] = "Checking success, deleting last stack";
-              $listStack[$endList]['check']=$tokenKata[$keyToken];
-              $listStack[$endList]['key']=$listStack[$endList]['key']+1;
-              $endStack=$endStack-1;
+
+              $resultToken[$endResult] = end($stack);
+              $listStack[$endKeyList]['endToken'] = $endResult+1;
+              $endResult++;
+
+              array_pop($listStack[$endKeyList]['child']);
+              $listStack[$endKeyList]['action'] = "Checking success, deleting token '".end($stack)."'";
+              $listStack[$endKeyList]['check']=$tokenKata[$keyToken];
+              $listStack[$endKeyList]['key']=$listStack[$endKeyList]['key']+1;
+              $endKeyStack=$endKeyStack-1;
             }else {
               //juka token masih ada dan stack masih ada
               //maka lakukan ke pengecekan ke stack
               $word = $tokenKata[$keyToken]; //ini tanda untuk memunculkan pesan
-              array_push($resultToken,$tokenKata[$keyToken]);
+              
+              $resultToken[$endResult] = end($stack);
+              $listStack[$endKeyList]['endToken'] = $endResult+1;
+              $endResult++;
+
+
               $keyToken++;
-              array_pop($listStack[$endList]['child']);
-              $listStack[$endList]['action'] = "Checking success, deleting last stack";
-              $listStack[$endList]['check']=$tokenKata[$keyToken];
-              $listStack[$endList]['key']=$listStack[$endList]['key']+1;
-              $endStack=$endStack-1;
+              array_pop($listStack[$endKeyList]['child']);
+              $listStack[$endKeyList]['action'] = "Checking success, deleting token '".end($stack)."'";
+              $listStack[$endKeyList]['check']=$tokenKata[$keyToken];
+              $listStack[$endKeyList]['key']=$listStack[$endKeyList]['key']+1;
+              $endKeyStack=$endKeyStack-1;
             }
           }elseif (in_array(end($stack),$tokenCheck)) {
             $word = end($stack); //ini tanda untuk memunculkan pesan
-            array_push($resultToken,end($stack));
-            array_pop($listStack[$endList]['child']);
-            $listStack[$endList]['action'] = "Checking success, deleting last stack";
-            $listStack[$endList]['check']=$tokenKata[$keyToken];
-            $listStack[$endList]['key']=$listStack[$endList]['key']+1;
-            $endStack=$endStack-1;
+
+            $resultToken[$endResult] = end($stack);
+            $listStack[$endKeyList]['endToken'] = $endResult+1;
+            $endResult++;
+
+            array_pop($listStack[$endKeyList]['child']);
+            $listStack[$endKeyList]['action'] = "Checking success, deleting last stack";
+            $listStack[$endKeyList]['check']=$tokenKata[$keyToken];
+            $listStack[$endKeyList]['key']=$listStack[$endKeyList]['key']+1;
+            $endKeyStack=$endKeyStack-1;
           }else {
             //jika yang dicek tidak sama
             //maka hapus stack terakhir lalu cek stack sebelumnya yang sebelumnya
             array_pop($listStack);
-            $endList = count($listStack)-1;
-            $listStack[$endList]['action'] = "Previous list has been delete";
-            $keyToken = $listStack[$endList]['key'];
+            $endKeyList = count($listStack)-1;
+            $listStack[$endKeyList]['action'] = "Previous list has been delete";
+            $keyToken = $listStack[$endKeyList]['key'];
+            $endResult = $listStack[$endKeyList]['endToken'];
           }
         }
       }else {
@@ -379,8 +390,9 @@ class Translation extends CI_Model{
           array_pop($listStack);
         }else {
           array_pop($listStack);
-          $endList = count($listStack)-1;
-          $keyToken = $listStack[$endList]['key'];
+          $endKeyList = count($listStack)-1;
+          $keyToken = $listStack[$endKeyList]['key'];
+          $endResult = $listStack[$endKeyList]['endToken'];
         }
       }
 
@@ -418,7 +430,7 @@ class Translation extends CI_Model{
 
       $countLoop++;
     }//end while
-    $date = array('diterima' => $diterima);
+    $date = array('diterima' => $diterima, 'Loop'=> $countLoop);
     var_dump($date);
     var_dump($resultToken);
     var_dump(array_reverse($listStack,true));
@@ -442,13 +454,13 @@ class Translation extends CI_Model{
     return $data;
   }
 
-  function addData($listStack,$tChild,$status,$key,$check,$endToken,$action=NULL){
+  function addData($listStack,$tChild,$status,$key,$check,$endResult,$action=NULL){
     $temp = array(
       'child' => $tChild,
       'action' => $action,
       'status' => $status,
       'key' => $key,
-      'endToken'=>$endToken,
+      'endToken'=>$endResult,
       'check' => "==>> ".$check,
     );
     array_push($listStack,$temp);
@@ -462,8 +474,8 @@ class Translation extends CI_Model{
       $array[$start] = $expld[$i];
       $start++;
     }
-    $endStack = sizeof($array)-1;
-    return array($endStack,$array);
+    $endKeyStack = sizeof($array)-1;
+    return array($endKeyStack,$array);
   }
 
   function haveChild($check,$grammarPascal){
