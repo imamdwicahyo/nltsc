@@ -52,21 +52,26 @@ class Process extends CI_Controller
 
 			//menggunakan fungsi parser untuk mengecek urutan token
 			$parsing = $parsing->process($scanning);
-			var_dump($parsing);die;
 			$data['parsing'] = $parsing;
+			// var_dump($parsing);die;
 
-			// if ($parsing['diterima'] == '1') {
-			// 	$cleanToken = $translation->removeAdditionalToken($scanning);
+			if ($parsing['diterima'] == '1') {
+				$cleanToken = $translation->removeAdditionalToken($scanning);
+				$data['cleanToken'] = $cleanToken;
 
-			// 	$changeToken = $translation->changeToken($cleanToken);
+				$changeToken = $translation->changeToken($cleanToken);
+				$data['changeToken'] = $changeToken;
 
-			// 	$shortToken = $translation->shortToken($changeToken);
+				$shortToken = $translation->shortToken($changeToken);
+				$data['shortToken'] = $shortToken;
 
-			// 	$codeInsertion = $translation->codeInsertion($shortToken);
-			// 	// var_dump($codeInsertion);die;
+				$codeInsertion = $translation->codeInsertion($shortToken);
+				$data['codeInsertion'] = $codeInsertion;
+				// var_dump($codeInsertion);die;
 
-			// 	$tdying = $translation->tidyingToken2($codeInsertion);
-			// }
+				$tdying = $translation->tidyingToken2($codeInsertion['result']);
+				$data['tdying'] = $tdying;
+			}
 
 			// echo "$tdying";
 		}

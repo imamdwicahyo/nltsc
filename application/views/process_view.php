@@ -240,11 +240,18 @@
                                                             <div class="col-sm-12">
                                                                 <div class="card">
                                                                     <div class="card-body">
-                                                                        <h5 class="card-title">Penurunan String</h5>
-                                                                        <?php foreach($parsing['result'] as $key=>$value): ?>
-																			<?= $value['word']." -> ".$value['stack']."<br>"; ?>
-																			<?php $num++; ?>
-																		<?php endforeach; ?>
+																		<h5 class="card-title">Penurunan String</h5>
+																		<?php if($parsing['diterima']==False) : ?>
+																			<font color="red">
+																				<?= $parsing['error_message'] ?>
+																			</font>
+																		<?php else : ?>
+																			<?php foreach($parsing['penurunan'] as $key=>$value): ?>
+																				<?= "&rarr; ".$value."<br>"; ?>
+																				<?php $num++; ?>
+																			<?php endforeach; ?>
+																		<?php endif; ?>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -260,8 +267,9 @@
 								<br>
 								
                                 <!-- begin : Translasi -->
-                                <?php if ($result_parsing != TRUE): ?>
-                                    <script language='javascript'>alert('Parsing Ditolak!');</script>
+                                <?php if ($parsing['diterima'] != TRUE): ?>
+									<script language='javascript'>alert('Parsing Ditolak!');</script>
+									<script language='javascript'>alert(<?php echo $parsing['error_message'] ?>);</script>
                                 <?php else: ?>
                                     <div class="card border-primary">
                                         <h5 class="card-header">Translasi</h5>
@@ -300,13 +308,15 @@
                                                                                                     <thead>
                                                                                                         <th>Index</th>
                                                                                                         <th>Token</th>
-                                                                                                    </thead>
-                                                                                                    <?php foreach ($scanning[0] as $key => $t) { ?>
+																									</thead>
+																									<?php $num = 1; ?>
+                                                                                                    <?php foreach ($scanning as $key => $value) { ?>
                                                                                                         <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-                                                                                                            <td><?= $scanning[1][$key] ?></td>
-                                                                                                        </tr>
+                                                                                                            <td><?= $num ?></td>
+                                                                                                            <td><?= $value['token'] ?></td>
+                                                                                                            <td><?= $value['class'] ?></td>
+																										</tr>
+																										<?php $num++; ?>
                                                                                                     <?php } ?>
                                                                                                 </table>
                                                                                             </div>
@@ -322,12 +332,14 @@
                                                                                                         <th>Index</th>
                                                                                                         <th>Token</th>
                                                                                                     </thead>
-                                                                                                    <?php foreach ($clean_token[0] as $key => $t) { ?>
+                                                                                                    <?php $num = 1; ?>
+                                                                                                    <?php foreach ($cleanToken as $key => $value) { ?>
                                                                                                         <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-                                                                                                            <td><?= $clean_token[1][$key] ?></td>
-                                                                                                        </tr>
+                                                                                                            <td><?= $num ?></td>
+                                                                                                            <td><?= $value['token'] ?></td>
+                                                                                                            <td><?= $value['class'] ?></td>
+																										</tr>
+																										<?php $num++; ?>
                                                                                                     <?php } ?>
                                                                                                 </table>
                                                                                             </div>
@@ -360,12 +372,14 @@
                                                                                                         <th>Index</th>
                                                                                                         <th>Token</th>
                                                                                                     </thead>
-                                                                                                    <?php foreach ($clean_token[0] as $key => $t) { ?>
+                                                                                                    <?php $num = 1; ?>
+                                                                                                    <?php foreach ($cleanToken as $key => $value) { ?>
                                                                                                         <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-                                                                                                            <td><?= $clean_token[1][$key] ?></td>
-                                                                                                        </tr>
+                                                                                                            <td><?= $num ?></td>
+                                                                                                            <td><?= $value['token'] ?></td>
+                                                                                                            <td><?= $value['class'] ?></td>
+																										</tr>
+																										<?php $num++; ?>
                                                                                                     <?php } ?>
                                                                                                 </table>
                                                                                             </div>
@@ -381,12 +395,14 @@
                                                                                                         <th>Index</th>
                                                                                                         <th>Token</th>
                                                                                                     </thead>
-                                                                                                    <?php foreach ($change_token[0] as $key => $t) { ?>
+                                                                                                    <?php $num = 1; ?>
+                                                                                                    <?php foreach ($changeToken as $key => $value) { ?>
                                                                                                         <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-                                                                                                            <td><?= $change_token[1][$key] ?></td>
-                                                                                                        </tr>
+                                                                                                            <td><?= $num ?></td>
+                                                                                                            <td><?= $value['token'] ?></td>
+                                                                                                            <td><?= $value['class'] ?></td>
+																										</tr>
+																										<?php $num++; ?>
                                                                                                     <?php } ?>
                                                                                                 </table>
                                                                                             </div>
@@ -419,12 +435,14 @@
                                                                                                         <th>Index</th>
                                                                                                         <th>Token</th>
                                                                                                     </thead>
-                                                                                                    <?php foreach ($change_token[0] as $key => $t) { ?>
+                                                                                                    <?php $num = 1; ?>
+                                                                                                    <?php foreach ($changeToken as $key => $value) { ?>
                                                                                                         <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-                                                                                                            <td><?= $change_token[1][$key] ?></td>
-                                                                                                        </tr>
+                                                                                                            <td><?= $num ?></td>
+                                                                                                            <td><?= $value['token'] ?></td>
+                                                                                                            <td><?= $value['class'] ?></td>
+																										</tr>
+																										<?php $num++; ?>
                                                                                                     <?php } ?>
                                                                                                 </table>
                                                                                             </div>
@@ -434,18 +452,19 @@
                                                                                         <div class="card">
                                                                                             <div class="card-body">
                                                                                                 <h5 class="card-title">Sesudah</h5>
-                                                                                                <?php //$short_token = shortToken($change_token) ?>
                                                                                                 <table class="table">
                                                                                                     <thead>
                                                                                                         <th>Index</th>
                                                                                                         <th>Token</th>
                                                                                                     </thead>
-                                                                                                    <?php foreach ($short_token[0] as $key => $t) { ?>
+                                                                                                    <?php $num = 1; ?>
+                                                                                                    <?php foreach ($shortToken as $key => $value) { ?>
                                                                                                         <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-                                                                                                            <td><?= $short_token[1][$key] ?></td>
-                                                                                                        </tr>
+                                                                                                            <td><?= $num ?></td>
+                                                                                                            <td><?= $value['token'] ?></td>
+                                                                                                            <td><?= $value['class'] ?></td>
+																										</tr>
+																										<?php $num++; ?>
                                                                                                     <?php } ?>
                                                                                                 </table>
                                                                                             </div>
@@ -478,12 +497,14 @@
                                                                                                         <th>Index</th>
                                                                                                         <th>Token</th>
                                                                                                     </thead>
-                                                                                                    <?php foreach ($short_token[0] as $key => $t) { ?>
+                                                                                                    <?php $num = 1; ?>
+                                                                                                    <?php foreach ($shortToken as $key => $value) { ?>
                                                                                                         <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-                                                                                                            <td><?= $short_token[1][$key] ?></td>
-                                                                                                        </tr>
+                                                                                                            <td><?= $num ?></td>
+                                                                                                            <td><?= $value['token'] ?></td>
+                                                                                                            <td><?= $value['class'] ?></td>
+																										</tr>
+																										<?php $num++; ?>
                                                                                                     <?php } ?>
                                                                                                 </table>
                                                                                             </div>
@@ -492,21 +513,27 @@
                                                                                     <div class="col-sm-6">
                                                                                         <div class="card">
                                                                                             <div class="card-body">
-                                                                                                <h5 class="card-title">Sesudah</h5>
-                                                                                                <?php //$code_insert = codeInsertion($short_token) ?>
-                                                                                                <table class="table">
-                                                                                                    <thead>
-                                                                                                        <th>Index</th>
-                                                                                                        <th>Token</th>
-                                                                                                    </thead>
-                                                                                                    <?php foreach ($code_insert as $key => $t) { ?>
-                                                                                                        <tr>
-                                                                                                            <td><?= $key+1 ?></td>
-                                                                                                            <td><?= $t ?></td>
-
-                                                                                                        </tr>
-                                                                                                    <?php } ?>
-                                                                                                </table>
+																								<h5 class="card-title">Sesudah</h5>
+																								<?php if($codeInsertion['diterima'] == False) : ?>
+																									<font color="red">
+																										Penyesuaian Bahasa Pascal Ditolak, Harap Periksa Kembali Grammar Pascalnya
+																									</font>
+																									<?php else : ?>
+																										<table class="table">
+																											<thead>
+																												<th>Index</th>
+																												<th>Token</th>
+																											</thead>
+																											<?php $num = 1; ?>
+																											<?php foreach ($codeInsertion['result'] as $key => $value) { ?>
+																												<tr>
+																													<td><?= $num ?></td>
+																													<td><?= $value ?></td>
+																												</tr>
+																												<?php $num++; ?>
+																											<?php } ?>
+																										</table>
+																									<?php endif; ?>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -528,11 +555,14 @@
                                                                         <div id="collapse_beutify_code" class="collapse">
                                                                             <div class="card-body">
                                                                                 <div class="row">
-                                                                                    <?php //$source_code = tidyingToken($code_insert) ?>
-                                                                                    <!-- <?php echo $source_code; ?> -->
-
-                                                                                    <?php //$source_code2 = tidyingToken2($code_insert) ?>
-                                                                                    <?php //echo $source_code2; ?>
+																					<?php if($codeInsertion['diterima'] == True) : ?>
+																						<?php echo $tdying; ?>
+																					<?php else : ?>
+																						<font color="red">
+																							Penyesuaian Bahasa Pascal Ditolak, Harap Periksa Kembali Grammar Pascalnya
+																						</font>
+																					<?php endif; ?>
+                                                                                    
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -560,31 +590,31 @@
                             <h5 class="card-header text-center">Keluaran</h5>
                             <div class="card-body">
                                 <h5 class="card-title">Hasil</h5>
-                                <hr>
-                                <?php if ($parsing == 'ditolak'): ?>
-                                    <?php echo 'PARSING DITOLAK!'; ?>
-                                    <?php $txt = 'parsing ditolak' ?>
-                                <?php elseif ($parsing == 'diterima'): ?>
-                                    <?php echo $source_code2; ?>
+                                <?php if ($parsing['diterima'] == True AND $codeInsertion['diterima'] == True): ?>
+                                    <?php echo $tdying; ?>
                                     <?php
 
-                                    // $text = "Hello <br /> Hello again <br> Hello again again <br/> Goodbye <BR>";
-                                    $txt = $source_code;
-                                    $breaks = array("<br />","<br>   ","<br/>","<br> ");
-                                    $txt = str_ireplace($breaks, "\r\n", $txt);
-                                    $tabs = array("&nbsp; &nbsp;  ");
-                                    $txt = str_ireplace($tabs, "\t", $txt);
+                                    // // $text = "Hello <br /> Hello again <br> Hello again again <br/> Goodbye <BR>";
+                                    // $txt = $source_code;
+                                    // $breaks = array("<br />","<br>   ","<br/>","<br> ");
+                                    // $txt = str_ireplace($breaks, "\r\n", $txt);
+                                    // $tabs = array("&nbsp; &nbsp;  ");
+                                    // $txt = str_ireplace($tabs, "\t", $txt);
 
-                                    $myfile = fopen("translation_result/newfile.pas", "w") or die("Unable to open file!");
-                                    fwrite($myfile, $txt);
-                                    fclose($myfile);
+                                    // $myfile = fopen("translation_result/newfile.pas", "w") or die("Unable to open file!");
+                                    // fwrite($myfile, $txt);
+                                    // fclose($myfile);
 
-                                    ?>
-                                    <hr>
+                                    // ?>
+                                    <!-- <hr> -->
                                     <!-- <a href="#" onClick="MyWindow=window.open('translation_result/open_devpascal.php','MyWindow',width=600,height=300); return false;">Click Here</a> -->
                                     <!-- <a href="#" onclick="window.open('translation_result/open_devpascal.php');return false">open b.php</a> -->
                                     <a href="translation_result/open_devpascal.php" target="_blank" class="btn btn-outline-success btn-block">Buka Hasil</a>
-                                <?php endif; ?>
+									<?php else : ?>
+										<font color="red">
+											Penerjemahan Bahasa Alami ke Source Code Dalam Bahasa Pascal Ditolak, Cek Kembali Grammar NL dan atau Grammar Pascal
+										</font>
+									<?php endif; ?>
 
 
                             </div>

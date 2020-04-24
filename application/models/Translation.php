@@ -218,7 +218,7 @@ class Translation extends CI_Model
         $result     = [];
         $resultToken = [];
         $keyToken   = 0;
-        $maxLoop    = 3145;
+        $maxLoop    = 20000;
         $pesan      = TRUE;
 
         //mendapatkan clean token dan class
@@ -252,7 +252,8 @@ class Translation extends CI_Model
             }
         }
 
-        $tokenCheck = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
+		$tokenCheck = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
+		// $tokenCheck = array('begin', 'end.', 'end', 'readln;', "'", ";", '(', ')');
 
         //menghilangkan value array yang duplikat
         $programIdent = array_unique($programIdent);
@@ -287,7 +288,7 @@ class Translation extends CI_Model
 
         $countLoop = 0;
         $word = "";
-        $tempResult = [];
+		$tempResult = [];
         while ($diterima == 0 and $countLoop < $maxLoop and count($listStack) > 0 and count($tokenKata) > 0) {
             $endKeyList = count($listStack) - 1; //mendapatkan key List stack terakhir
             $word = ""; //inisialisasi
@@ -330,10 +331,10 @@ class Translation extends CI_Model
 
                     if ($tokenKata[$keyToken] == preg_replace('/[#]/', ' ', end($stack))) {
                         // jika yang dicek sama
-
+						
                         if ($keyToken == (count($tokenKata) - 1) and (count($stack) == 1)) {
                             //jika token dan stack habis maka string diterima
-                            $resultToken[$endResult] = end($stack);
+							$resultToken[$endResult] = end($stack);
                             $diterima = 1;
                         } elseif ($keyToken == (count($tokenKata) - 1) and (count($stack) > 1)) {
                             //jika token habis dan stack masih ada
@@ -401,7 +402,7 @@ class Translation extends CI_Model
             }
 
 
-            if (count($stack) == 0) {
+            if (count($stack) == 0 AND count($tokenKata) == $keyToken+2) {
                 $diterima = 1;
             }
 
@@ -436,9 +437,17 @@ class Translation extends CI_Model
         } //end while
         $date = array('diterima' => $diterima, 'Loop' => $countLoop);
         // var_dump($date);
-        // var_dump($resultToken);
-		// var_dump(array_reverse($listStack, true));
-		return $resultToken;
+		// var_dump($countLoop);
+		$data = array(
+			'num_loop' => $countLoop,
+			// 'token' => $tokenKata,
+			'countTOken' => count($tokenKata),
+			'endTOken' => $keyToken,
+			'diterima' => $diterima,
+			'result' => $resultToken,
+			// 'list' => array_reverse($listStack, true),
+		);
+		return $data;
     }
 
     function tidyingToken2($code_insert)

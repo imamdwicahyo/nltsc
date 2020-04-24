@@ -43,13 +43,14 @@ class Scanning extends CI_Model{
     foreach ($listKata as $id => $value) {
         if ($value == 'variabel' || $value == 'var') {
             $i = $id;
-            while ($listKata[$i]!="" && $listKata[$i] != '.' && $i < 20) {
+            while ($listKata[$i] != '.' && $i < 20) {
                 if ((in_array($listKata[$i], $tokenArithmeticOperator) == false) &&
                     (in_array($listKata[$i], $tokenKeyword) == false) &&
                     (in_array($listKata[$i], $tokenAdditionalToken) == false) &&
                     ($listKata[$i] != '.') &&
                     ($listKata[$i] != ',') &&
-                    ($listKata[$i] != 'data')
+					($listKata[$i] != 'data') &&
+					($listKata[$i] != "")
                 )
                 {
                     array_push($tokenVariables, $listKata[$i]);
