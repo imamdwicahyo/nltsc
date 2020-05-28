@@ -22,6 +22,8 @@ class Process extends CI_Controller
 		$input = "";
 		$data = [];
 		if (isset($_POST['input'])) {
+
+			//eko
 			//inisialisasi
 			$prepocessing = $this->Prepocessing;
 			$scanning = $this->Scanning;
