@@ -178,7 +178,7 @@ class Parsing extends CI_Model{
       }
 
 
-      if (count($stack)==0) {
+      if (count($stack)==0 AND count($tokenKata) == 0) {
         $diterima=1;
 			}
 			
