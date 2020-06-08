@@ -220,7 +220,7 @@ class Translation extends CI_Model
         $result     = [];
         $resultToken = [];
         $keyToken   = 0;
-        $maxLoop    = 20000;
+        $maxLoop    = 100000;
         $pesan      = TRUE;
 
         //mendapatkan clean token dan class
@@ -326,7 +326,7 @@ class Translation extends CI_Model
                             $action = "new Stack from parent = " . end($stack);
 
                             list($tempEnd, $tempStack) = $this->inputCheck($endKeyStack, $listStack[$endKeyList]['child'], $value);
-                            $listStack = $this->addData($listStack, $tempStack, TRUE, $keyToken, $tokenKata[$keyToken], $endResult, $action);
+                            $listStack = $this->addData($listStack, $tempStack, TRUE, $keyToken, $tokenKata[$keyToken]."\n = ".implode(" ",$resultToken), $endResult, $action);
                         }
                     }
                 } else { //jika stack terakhir tidak memiliki child lakukan pengecekan
@@ -371,7 +371,7 @@ class Translation extends CI_Model
                             $keyToken++;
                             array_pop($listStack[$endKeyList]['child']);
                             $listStack[$endKeyList]['action'] = "Checking success, deleting token '" . end($stack) . "'";
-                            $listStack[$endKeyList]['check'] = $tokenKata[$keyToken];
+                            $listStack[$endKeyList]['check'] = $tokenKata[$keyToken]."\n = ".implode(" ",$resultToken);
                             $listStack[$endKeyList]['key'] = $listStack[$endKeyList]['key'] + 1;
                             $endKeyStack = $endKeyStack - 1;
                         }
@@ -384,7 +384,7 @@ class Translation extends CI_Model
 
                         array_pop($listStack[$endKeyList]['child']);
                         $listStack[$endKeyList]['action'] = "Checking success, deleting last stack";
-                        $listStack[$endKeyList]['check'] = $tokenKata[$keyToken];
+                        $listStack[$endKeyList]['check'] = $tokenKata[$keyToken]."\n = ".implode(" ",$resultToken);
                         $listStack[$endKeyList]['key'] = $listStack[$endKeyList]['key'] + 1;
                         $endKeyStack = $endKeyStack - 1;
                     } else {
