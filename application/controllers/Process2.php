@@ -10,7 +10,12 @@ class Process2 extends CI_Controller
 		$this->load->model(array(
 			'Prepocessing',
 			'ScanningV2',
-			'Parsing',
+			'ParsingV2',
+			'RemoveAdditionalToken',
+			'ChangeToken',
+			'ShortToken',
+			'CodeInsertion',
+			'TidyingToken',
 			'Translation'
 		));
 		//Codeigniter : Write Less Do More
@@ -21,11 +26,16 @@ class Process2 extends CI_Controller
 
 		$input = "";
 		$data = [];
-		if (isset($_POST['input'])) {
+		if (isset($_POST['input']) AND $_POST['input'] != "") {
 			//inisialisasi
 			$prepocessing = $this->Prepocessing;
 			$mScanning = $this->ScanningV2;
-			$parsing = $this->Parsing;
+			$parsing = $this->ParsingV2;
+			$removeAdditionalToken = $this->RemoveAdditionalToken;
+			$changeToken = $this->ChangeToken;
+			$shortToken = $this->ShortToken;
+			$codeInsertion = $this->CodeInsertion;
+			$tidyingToken = $this->TidyingToken;
 			$translation = $this->Translation;
 
 			// get input text dari user
@@ -46,25 +56,25 @@ class Process2 extends CI_Controller
 			//menggunakan fungsi parser untuk mengecek urutan token
 			$parsing = $parsing->process($scanning);
 			$data['parsing'] = $parsing;
-			var_dump($parsing);
-			die;
+			// var_dump($parsing);
+			// die;
 
 
 			if ($parsing['diterima'] == '1') {
-				$cleanToken = $translation->removeAdditionalToken($scanning);
+				$cleanToken = $removeAdditionalToken->process($scanning);
 				$data['cleanToken'] = $cleanToken;
 
-				$changeToken = $translation->changeToken($cleanToken);
+				$changeToken = $changeToken->process($cleanToken);
 				$data['changeToken'] = $changeToken;
 
-				$shortToken = $translation->shortToken($changeToken);
+				$shortToken = $shortToken->process($changeToken);
 				$data['shortToken'] = $shortToken;
 
-				$codeInsertion = $translation->codeInsertion($shortToken);
+				$codeInsertion = $codeInsertion->process($shortToken);
 				$data['codeInsertion'] = $codeInsertion;
 				// var_dump($codeInsertion);die;
 
-				$tdying = $translation->tidyingToken2($codeInsertion['result']);
+				$tdying = $tidyingToken->process($codeInsertion['result']);
 				$data['tdying'] = $tdying;
 			}
 
@@ -73,6 +83,6 @@ class Process2 extends CI_Controller
 
 		$data['input'] = $input;
 		$data['status_parsing'] = TRUE;
-		$this->load->view('process_view', $data);
+		$this->load->view('process_viewV2', $data);
 	}
 }
