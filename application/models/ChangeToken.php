@@ -10,19 +10,50 @@ class ChangeToken extends CI_Model
         //Codeigniter : Write Less Do More
     }
 
+    var $array_change = array(
+        'PROGRAM_KEYWORD' => 'program',
+        'VAR_KEYWORD' => 'var',
+        'KEYWORD_DATA_TYPE' => ':',
+        'INPUT_OPR' => ':=',
+        'MULTIPLICATION_OPR' => '*',
+        'ADDITION_OPR' => '+',
+        'REDUCTION_OPR' => '-',
+        'DIVISION_OPR' => '/',
+        'MOD_OPR' => 'mod',
+        'DIV_OPR' => 'div',
+        'BIG_OPR' => '>',
+        'SMALL_OPR' => '<',
+        'BIG_SAME_OPR' => '>=',
+        'SMALL_SAME_OPR' => '<=',
+        'EQUALS_OPR' => '=',
+        'NOT_EQUALS_OPR' => '<>',
+        'KEYWORD_WHILE' => 'while',
+        'KEYWORD_FOR' => 'for',
+        'KEYWORD_REPEAT' => 'repeat',
+        'KEYWORD_REPEAT2' => 'until',
+        'LOOP_OPR' => 'do',
+        'BETWEEN' => 'to',
+        'BETWEEN2' => 'downto',
+        'KEYWORD_INPUT' => 'readln',
+        'KEYWORD_OUTPUT' => 'writeln',
+        'INT' => 'integer',
+        'FRACTION' => 'real',
+        'KEYWORD_SQRT' => 'sqrt',
+    );
+
     function process($cleanToken)
     {
         //get tabel grammar NL
         $grammar_nl = $this->get_grammar_NL();
 
         //membuat Desain Grammar NL untuk melakukan pengecekan;
-        $grammarParent = [];
-        $grammarChild = [];
+        $grammar_parent = [];
+        $grammar_child  = [];
         foreach ($grammar_nl as $key => $listGrammar) {
             $expld = explode('|', $listGrammar->child);
             foreach ($expld as $word) {
-                array_push($grammarParent, $listGrammar->parent);
-                array_push($grammarChild, $word);
+                array_push($grammar_parent, $listGrammar->parent);
+                array_push($grammar_child, $word);
             }
         }
 
@@ -32,65 +63,11 @@ class ChangeToken extends CI_Model
 
             if ($class == "Keyword" or $class == "ArithmeticOperator") {
                 //mendapatkan parent dari token
-                $keyParent = array_search($token, $grammarChild);
-                $parent = $grammarParent[$keyParent];
+                $keyParent = array_search($token, $grammar_child);
+                $parent = $grammar_parent[$keyParent];
 
-                if ($parent == 'PROGRAM_KEYWORD') {
-                    $cleanToken[$key]['token'] = 'program';
-                } elseif ($parent == 'VAR_KEYWORD') {
-                    $cleanToken[$key]['token'] = 'var';
-                } elseif ($parent == 'KEYWORD_DATA_TYPE') {
-                    $cleanToken[$key]['token'] = ':';
-                } elseif ($parent == 'INPUT_OPR') {
-                    $cleanToken[$key]['token'] = ':=';
-                } elseif ($parent == 'MULTIPLICATION_OPR') {
-                    $cleanToken[$key]['token'] = '*';
-                } elseif ($parent == 'ADDITION_OPR') {
-                    $cleanToken[$key]['token'] = '+';
-                } elseif ($parent == 'REDUCTION_OPR') {
-                    $cleanToken[$key]['token'] = '-';
-                } elseif ($parent == 'DIVISION_OPR') {
-                    $cleanToken[$key]['token'] = '/';
-                } elseif ($parent == 'MOD_OPR') {
-                    $cleanToken[$key]['token'] = 'mod';
-                } elseif ($parent == 'DIV_OPR') {
-                    $cleanToken[$key]['token'] = 'div';
-                } elseif ($parent == 'BIG_OPR') {
-                    $cleanToken[$key]['token'] = '>';
-                } elseif ($parent == 'SMALL_OPR') {
-                    $cleanToken[$key]['token'] = '<';
-                } elseif ($parent == 'BIG_SAME_OPR') {
-                    $cleanToken[$key]['token'] = '>=';
-                } elseif ($parent == 'SMALL_SAME_OPR') {
-                    $cleanToken[$key]['token'] = '<=';
-                } elseif ($parent == 'EQUALS_OPR') {
-                    $cleanToken[$key]['token'] = '=';
-                } elseif ($parent == 'NOT_EQUALS_OPR') {
-                    $cleanToken[$key]['token'] = '<>';
-                } elseif ($parent == 'KEYWORD_WHILE') {
-                    $cleanToken[$key]['token'] = 'while';
-                } elseif ($parent == 'KEYWORD_FOR') {
-                    $cleanToken[$key]['token'] = 'for';
-                } elseif ($parent == 'KEYWORD_REPEAT') {
-                    $cleanToken[$key]['token'] = 'repeat';
-                } elseif ($parent == 'KEYWORD_REPEAT2') {
-                    $cleanToken[$key]['token'] = 'until';
-                } elseif ($parent == 'LOOP_OPR') {
-                    $cleanToken[$key]['token'] = 'do';
-                } elseif ($parent == 'BETWEEN') {
-                    $cleanToken[$key]['token'] = 'to';
-                } elseif ($parent == 'BETWEEN2') {
-                    $cleanToken[$key]['token'] = 'downto';
-                } elseif ($parent == 'KEYWORD_INPUT') {
-                    $cleanToken[$key]['token'] = 'readln';
-                } elseif ($parent == 'KEYWORD_OUTPUT') {
-                    $cleanToken[$key]['token'] = 'writeln';
-                } elseif ($parent == 'INT') {
-                    $cleanToken[$key]['token'] = 'integer';
-                } elseif ($parent == 'FRACTION') {
-                    $cleanToken[$key]['token'] = 'real';
-                } elseif ($parent == 'KEYWORD_SQRT') {
-                    $cleanToken[$key]['token'] = 'sqrt';
+                if (isset($this->array_change[$parent])) {
+                    $cleanToken[$key]['token'] = $this->array_change[$parent];
                 }
             } elseif ($class == '.') {
                 $cleanToken[$key]['token'] = ';';
