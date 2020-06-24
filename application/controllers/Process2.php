@@ -14,7 +14,7 @@ class Process2 extends CI_Controller
 			'RemoveAdditionalToken',
 			'ChangeToken',
 			'ShortToken',
-			'CodeInsertion',
+			'CodeInsertion2',
 			'TidyingToken',
 			'Translation'
 		));
@@ -34,7 +34,7 @@ class Process2 extends CI_Controller
 			$removeAdditionalToken = $this->RemoveAdditionalToken;
 			$changeToken = $this->ChangeToken;
 			$shortToken = $this->ShortToken;
-			$codeInsertion = $this->CodeInsertion;
+			$codeInsertion = $this->CodeInsertion2;
 			$tidyingToken = $this->TidyingToken;
 			$translation = $this->Translation;
 
@@ -61,7 +61,7 @@ class Process2 extends CI_Controller
 
 
 			if ($parsing['diterima'] == '1') {
-				$cleanToken = $removeAdditionalToken->process($scanning);
+				$cleanToken = $removeAdditionalToken->process($parsing['scanning']);
 				$data['cleanToken'] = $cleanToken;
 
 				$changeToken = $changeToken->process($cleanToken);
@@ -80,7 +80,7 @@ class Process2 extends CI_Controller
 
 			// echo "$tdying";
 		}
-
+		
 		$data['input'] = $input;
 		$data['status_parsing'] = TRUE;
 		$this->load->view('process_viewV2', $data);

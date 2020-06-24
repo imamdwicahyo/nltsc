@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class ParsingV2 extends CI_Model
+class CodeInsertion2 extends CI_Model
 {
 
     public function __construct()
@@ -21,8 +21,13 @@ class ParsingV2 extends CI_Model
     var $diterima = 0;
     var $max_loop = 100000;
     var $key_token = 0;
+    var $end_result = 0;
     var $list_token = array();
+    var $result = array();
     var $max_token_success = 0;
+    var $max_count_success = 0;
+    // var $token_specific = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
+    var $token_specific = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
 
     /**
      * Fungsi process adalah fungsi utama dari tahap parsing
@@ -39,23 +44,21 @@ class ParsingV2 extends CI_Model
         $this->create_grammar();
 
         // menambahkan grammar hasil dari scanning
-        $this->add_grammar_from_scanning($input, 'ProgramIdent', 'PROGRAM_IDENT');
-        $this->add_grammar_from_scanning($input, 'VariableIdent', 'IDENT_VAR');
+        $this->add_grammar_from_scanning($input, 'ProgramIdent,VariableIdent', 'IDENTIFIER');
         $this->add_grammar_from_scanning($input, 'String', 'STRING');
         $this->add_grammar_from_scanning($input, 'Number', 'NUMBER');
 
         // masukan rule(child) dengan parent 'START' pada stack
-        $key = array_search("START", $this->grammar_parent); //cari key dari grammar parent
+        $key = array_search("PROGRAM_MODULE", $this->grammar_parent); //cari key dari grammar parent
         $arr_rule = $this->add_array_rule(NULL, $this->grammar_child[$key]); //buat array rule baru
-        $parsing = $this->create_result_parsing($this->key_token,$arr_rule); //buat info hasil penurunan
-        $this->add_to_stack($arr_rule, $this->key_token, array($parsing)); //buat stack baru
+        $this->add_to_stack($arr_rule, $this->key_token, $this->end_result); //buat stack baru
 
         // mulai proses penurunan
         $count_loop = 0;
+        $mesage = "";
         while ($this->diterima == 0 and $count_loop < $this->max_loop and count($this->stack) > 0) {
             //get rule
             $arr_rule = $this->stack[$this->end_stack]['rule'];
-            $arr_parsing = $this->stack[$this->end_stack]['result_parsing'];
             $end_rule   = count($arr_rule) - 1;
             $rule_name  = $arr_rule[$end_rule];
             $token_name = $this->list_token[$this->key_token];
@@ -71,62 +74,103 @@ class ParsingV2 extends CI_Model
                     // turunkan rule lalu masukan ke arr_rule
                     $arr_rule = $this->add_array_rule($arr_rule, $child); // memasukan child ke array rule
                     $this->stack[$this->end_stack]['rule'] = $arr_rule; // ubah array rule lama ke array rule yang baru di stack
-                    $parsing = $this->create_result_parsing($this->key_token,$arr_rule); // membuat info hasil penurunan
-                    array_push($arr_parsing,$parsing); // memasukan info hasil penurunan ke array parsing
-                    $this->stack[$this->end_stack]['result_parsing'] = $arr_parsing; // update array parsing ke yang terbaru
+                    $mesage = "1";
                 } else {
                     foreach ($arr_child as $key => $child) {
                         $new_arr_rule = $this->add_array_rule($arr_rule, $child); // membuat array rule baru
-                        $new_arr_parsing = $arr_parsing;   // membuat array parsing baru
-                        $parsing = $this->create_result_parsing($this->key_token,$new_arr_rule); // membuat info hasil penurunan
-                        array_push($new_arr_parsing,$parsing); //memasukan info hasil penurunan ke array parsing baru
-                        $this->add_to_stack($new_arr_rule, $this->key_token, $new_arr_parsing); //menambahkan stack baru dengan array rule dan array parsing yang baru
+                        $this->add_to_stack($new_arr_rule, $this->key_token, $this->end_result); //menambahkan stack baru dengan array rule dan array parsing yang baru
                         $this->end_stack = $this->end_stack + 1; //tambahkan var end_stack dengan angka 1;
                     }
                     $this->end_stack = count($this->stack) - 1; //update var end_stack dengan key array dari stack terakhir
+                    $mesage = "2";
                 }
             } else {
+                $arr_rule = $this->stack[$this->end_stack]['rule'];
+                $total_list_token = count($this->list_token) - 1;
+                $total_arr_rule = count($arr_rule);
+
                 if ($rule_name == $token_name) {
-                    $total_list_token = count($this->list_token) - 1;
-                    $total_arr_rule = count($arr_rule);
 
                     if ($total_arr_rule == 1 and $this->key_token == $total_list_token) {
                         // jika ini rule dan token yang terakhir maka string diterima
                         $this->diterima = 1;
+                        $mesage = "5";
                         // echo "$total_arr_rule == 1 dan $this->key_token = $total_list_token <br><br>";
                     } elseif ($total_arr_rule > 1 and $this->key_token < $total_list_token) {
                         // jika rule dan token masih ada maka tetap lakukan pengecekan
-                        $this->checking_success();
+                        $this->checking_success($token_name);
+                        $mesage = "6";
                     } elseif ($total_arr_rule == 1 and $this->key_token < $total_list_token) {
                         // jika rule habis dan token masih ada maka pengecekan gagal, hapus stack terakhir
                         $this->deleting_last_stack();
+                        $mesage = "7";
                     } elseif ($total_arr_rule > 1 and $this->key_token == $total_list_token) {
                         // jika rule masih ada dan token sudah habis maka pengecekan gagal, hapus stack terakhir
                         $this->deleting_last_stack();
+                        $mesage = "8";
                     } else {
                         echo "KONDISI TIDAK DITEMUKAN = $count_loop";
                         die;
                     }
+                } elseif (in_array($rule_name, $this->token_specific)) {
+                    $this->checking_specific_token($rule_name, $token_name);
                 } else {
+                    $this->deleting_last_stack();
+                    $mesage = "9";
+                }
+
+                $arr_rule = $this->stack[$this->end_stack]['rule'];
+                if ($this->key_token >= $total_list_token) {
+                    $this->diterima = 1;
+                    foreach ($arr_rule as $key => $value) {
+                        if (!in_array($value, $this->token_specific)) {
+                            $this->diterima = 0;
+                        }
+                    }
+                    if ($this->diterima != 1) {
+                        $this->deleting_last_stack();
+                    } else {
+                        $end_rule = count($arr_rule) - 1;
+                        for ($i = $end_rule; $i >= 0; $i--) {
+                            $this->result[$this->end_result] = $arr_rule[$i];
+                            $this->end_result = $this->end_result + 1;
+                        }
+                    }
+                }
+
+                if (count($arr_rule) < 1 and $this->key_token <= $total_list_token) {
                     $this->deleting_last_stack();
                 }
             }
 
-            $this->max_token_success = ($this->max_token_success < $this->key_token) ? $this->key_token : $this->max_token_success ; //mendapatkan key_token paling tinggai
+            $this->max_token_success = ($this->max_token_success < $this->key_token) ? $this->key_token : $this->max_token_success; //mendapatkan key_token paling tinggai
             $count_loop++;
         }
 
         $data = array(
             'diterima' => $this->diterima,
             'loop' => $count_loop,
-            'message' => $this->create_message(),
-            'result' => ($this->stack != NULL) ? $this->stack[$this->end_stack]['result_parsing'] : "" ,
-            'scanning' => $input,
-            // 'stack' => $this->stack,
-            // 'token' => $this->list_token,
+            'message' => $mesage,
+            'result' => $this->result,
+            'token' => $this->list_token,
+            'stack' => $this->stack,
         );
-        
+
         return $data;
+    }
+
+    /** Fungsi ketika token dan rule sama */
+    public function checking_specific_token($rule_name, $token_name)
+    {
+        //update rule
+        $arr_rule = $this->stack[$this->end_stack]['rule'];
+        array_pop($arr_rule);
+        $this->stack[$this->end_stack]['rule'] = $arr_rule;
+
+        //update result 
+        $this->result[$this->end_result] = $rule_name;
+        $this->end_result = $this->end_result + 1;
+        $this->stack[$this->end_stack]['end_result'] = $this->end_result;
     }
 
     /** Fungsi untuk menampilkan pesan eror */
@@ -134,38 +178,41 @@ class ParsingV2 extends CI_Model
     {
         if ($this->diterima == 0) {
             $text = "";
-            for ($i=0; $i <= $this->max_token_success ; $i++) { 
-                $text = $text." ".$this->list_token[$i];
+            for ($i = 0; $i <= $this->max_token_success; $i++) {
+                $text = $text . " " . $this->list_token[$i];
             }
-            return "Message: Terjadi kesalahan kata ".$this->list_token[$this->max_token_success].". Kalimat : \"$text.......\"";
-        }else{
-            return implode(" ",$this->list_token);
+            return "Message: Terjadi kesalahan kata " . $this->list_token[$this->max_token_success] . ". Kalimat : \"$text.......\"";
+        } else {
+            return implode(" ", $this->list_token);
         }
     }
 
     /** Fungsi untuk mendapatkan informasi penurunan grammar NL */
-    public function create_result_parsing($key_token,$arr_rule)
+    public function create_result_parsing($key_token, $arr_rule)
     {
         if ($key_token > 0) {
             $text = "";
-            for ($i=0; $i < $key_token ; $i++) { 
-                $text = $text.$this->list_token[$i]." ";
+            for ($i = 0; $i < $key_token; $i++) {
+                $text = $text . $this->list_token[$i] . " ";
             }
-            $rule = implode(" ",array_reverse($arr_rule));
-            return $text.$rule;
-        }else{
-            return implode(" ",array_reverse($arr_rule));
+            $rule = implode(" ", array_reverse($arr_rule));
+            return $text . $rule;
+        } else {
+            return implode(" ", array_reverse($arr_rule));
         }
     }
 
     /** Fungsi ketika token dan rule sama */
-    public function checking_success()
+    public function checking_success($token_name)
     {
         $arr_rule = $this->stack[$this->end_stack]['rule']; //get array rule
         array_pop($arr_rule); // deleting last rule
+        $this->result[$this->end_result] = $token_name;
         $this->key_token = $this->key_token + 1;
+        $this->end_result = $this->end_result + 1;
         $this->stack[$this->end_stack]['rule'] = $arr_rule;
         $this->stack[$this->end_stack]['key_token'] = $this->key_token;
+        $this->stack[$this->end_stack]['end_result'] = $this->end_result;
     }
 
     /** Fungsi untuk menghapus stack terakhir */
@@ -175,7 +222,8 @@ class ParsingV2 extends CI_Model
             array_pop($this->stack);
             $this->end_stack = count($this->stack) - 1;
             $this->key_token = $this->stack[$this->end_stack]['key_token'];
-        }else{
+            $this->end_result = $this->stack[$this->end_stack]['end_result'];
+        } else {
             array_pop($this->stack);
         }
     }
@@ -217,12 +265,12 @@ class ParsingV2 extends CI_Model
     }
 
     /** Fungsu untuk menambahkan stack baru */
-    public function add_to_stack($arr_rule, $key_token, $arr_parsing)
+    public function add_to_stack($arr_rule, $key_token, $end)
     {
         $data = array(
             'key_token' => $key_token,
+            'end_result' => $end,
             'rule' => $arr_rule,
-            'result_parsing' => $arr_parsing,
         );
         $this->stack[$this->end_stack] = $data;
     }
@@ -247,7 +295,7 @@ class ParsingV2 extends CI_Model
     public function create_grammar()
     {
         $this->db->select('parent,child');
-        $this->db->from('grammar_nl');
+        $this->db->from('grammar_pascal');
         $result_db = $this->db->get()->result();
         foreach ($result_db as $key => $value) {
             array_push($this->grammar_parent, $value->parent);
@@ -256,12 +304,15 @@ class ParsingV2 extends CI_Model
     }
 
     /** Menambahkan grammar yang didapat dari hasil scanning */
-    public function add_grammar_from_scanning($scanning, $name_class, $parent_name = NULL)
+    public function add_grammar_from_scanning($scanning, $class, $parent_name = NULL)
     {
         $temp_child = array();
-        foreach ($scanning as $key => $value) {
-            if ($value['class'] == $name_class) {
-                array_push($temp_child, preg_replace('/[ ]/', '#', $value['token']));
+        $list_name_class = explode(",", $class);
+        foreach ($list_name_class as $key => $name_class) {
+            foreach ($scanning as $key => $value) {
+                if ($value['class'] == $name_class) {
+                    array_push($temp_child, preg_replace('/[ ]/', '#', $value['token']));
+                }
             }
         }
         //pastikan tidak ada token yang sama
