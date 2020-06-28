@@ -39,6 +39,7 @@ class ChangeToken extends CI_Model
         'INT' => 'integer',
         'FRACTION' => 'real',
         'KEYWORD_SQRT' => 'sqrt',
+        'KEYWORD_ABS' => 'abs',
     );
 
     function process($cleanToken)

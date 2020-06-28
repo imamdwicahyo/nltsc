@@ -119,27 +119,29 @@ class CodeInsertion2 extends CI_Model
                     $mesage = "9";
                 }
 
-                $arr_rule = $this->stack[$this->end_stack]['rule'];
-                if ($this->key_token >= $total_list_token) {
-                    $this->diterima = 1;
-                    foreach ($arr_rule as $key => $value) {
-                        if (!in_array($value, $this->token_specific)) {
-                            $this->diterima = 0;
+                if ($this->stack != NULL) {
+                    $arr_rule = $this->stack[$this->end_stack]['rule'];
+                    if ($this->key_token >= $total_list_token) {
+                        $this->diterima = 1;
+                        foreach ($arr_rule as $key => $value) {
+                            if (!in_array($value, $this->token_specific)) {
+                                $this->diterima = 0;
+                            }
+                        }
+                        if ($this->diterima != 1) {
+                            $this->deleting_last_stack();
+                        } else {
+                            $end_rule = count($arr_rule) - 1;
+                            for ($i = $end_rule; $i >= 0; $i--) {
+                                $this->result[$this->end_result] = $arr_rule[$i];
+                                $this->end_result = $this->end_result + 1;
+                            }
                         }
                     }
-                    if ($this->diterima != 1) {
-                        $this->deleting_last_stack();
-                    } else {
-                        $end_rule = count($arr_rule) - 1;
-                        for ($i = $end_rule; $i >= 0; $i--) {
-                            $this->result[$this->end_result] = $arr_rule[$i];
-                            $this->end_result = $this->end_result + 1;
-                        }
-                    }
-                }
 
-                if (count($arr_rule) < 1 and $this->key_token <= $total_list_token) {
-                    $this->deleting_last_stack();
+                    if (count($arr_rule) < 1 and $this->key_token <= $total_list_token) {
+                        $this->deleting_last_stack();
+                    }
                 }
             }
 
