@@ -65,6 +65,7 @@ class ScanningV2 extends CI_Model
         //mengklasifikasikan kata kedalam class class
         $id = 0;
         $max = count($list_kata);
+        $maka_if = 0;
         while ($id < $max) {
             if (is_numeric($list_kata[$id]) || is_numeric(preg_replace('/[,]/', '', $list_kata[$id]))) {
                 // jika token yang dicek adalah number
@@ -130,29 +131,21 @@ class ScanningV2 extends CI_Model
                     // jika satu kata yang dicek ada di tabel token_class
                     $token = $list_kata[$id];
 
-                     if ($token == 'maka') {
-                       $temp_maka = [];
-                       $temp_maka = [($list_kata[$id - 10]),($list_kata[$id - 9]),($list_kata[$id - 8]),($list_kata[$id - 7]),($list_kata[$id - 6]),($list_kata[$id - 5]),
-                       ($list_kata[$id - 4]),($list_kata[$id - 3]),($list_kata[$id - 2]),($list_kata[$id - 1]),($list_kata[$id])];
-                       $temp_maka_baru = implode(" ", $temp_maka);
-                       if(preg_match("/jika/i", $temp_maka_baru)) {
-                         $temp = array(
-                             'token' => $token,
-                             'class' => 'AdditionalToken');
-                       }else{
-                         $temp = array(
-                             'token' => $token,
-                             'class' => 'Keyword');
-                       };
-                      array_push($result_scanning, $temp);
-                    }else{
-                      $key = array_search($token,$list_token);
-                      $class = $list_kelas[$key];
-                      $temp = array(
-                        'token' => $token,
-                        'class' => $class);
-                      array_push($result_scanning, $temp);
-                    };
+                    $key = array_search($token,$list_token);
+                    $class = $list_kelas[$key];
+
+                    if ($token == "jika") {
+                        $maka_if = 1;
+                    }
+                    if ($token == "maka" AND $maka_if == 1) {
+                        $class = "AdditionalToken";
+                        $maka_if = 0;
+                    }
+                    
+                    $temp = array(
+                      'token' => $token,
+                      'class' => $class);
+                    array_push($result_scanning, $temp);
 
                     $id++;
                 // echo "7 = ";

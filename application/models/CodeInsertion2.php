@@ -19,7 +19,7 @@ class CodeInsertion2 extends CI_Model
 
     // inisialisasi variabel lainnya
     var $diterima = 0;
-    var $max_loop = 1000000;
+    var $max_loop = 100000;
     var $key_token = 0;
     var $end_result = 0;
     var $list_token = array();
