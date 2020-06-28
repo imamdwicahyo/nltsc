@@ -126,20 +126,39 @@ class ScanningV2 extends CI_Model
                 array_push($result_scanning, $temp);
                 $id = $id + 2;
                 // echo "6 = ";
-            } elseif (in_array($list_kata[$id], $list_token)) {
-                // jika satu kata yang dicek ada di tabel token_class
-                $token = $list_kata[$id];
-                $key = array_search($token,$list_token);
-                $class = $list_kelas[$key];
-                $temp = array(
-                    'token' => $token, 
-                    'class' => $class);
-                array_push($result_scanning, $temp);
-                $id++;
+              } elseif (in_array($list_kata[$id], $list_token)) {
+                    // jika satu kata yang dicek ada di tabel token_class
+                    $token = $list_kata[$id];
+
+                     if ($token == 'maka') {
+                       $temp_maka = [];
+                       $temp_maka = [($list_kata[$id - 10]),($list_kata[$id - 9]),($list_kata[$id - 8]),($list_kata[$id - 7]),($list_kata[$id - 6]),($list_kata[$id - 5]),
+                       ($list_kata[$id - 4]),($list_kata[$id - 3]),($list_kata[$id - 2]),($list_kata[$id - 1]),($list_kata[$id])];
+                       $temp_maka_baru = implode(" ", $temp_maka);
+                       if(preg_match("/jika/i", $temp_maka_baru)) {
+                         $temp = array(
+                             'token' => $token,
+                             'class' => 'AdditionalToken');
+                       }else{
+                         $temp = array(
+                             'token' => $token,
+                             'class' => 'Keyword');
+                       };
+                      array_push($result_scanning, $temp);
+                    }else{
+                      $key = array_search($token,$list_token);
+                      $class = $list_kelas[$key];
+                      $temp = array(
+                        'token' => $token,
+                        'class' => $class);
+                      array_push($result_scanning, $temp);
+                    };
+
+                    $id++;
                 // echo "7 = ";
             } elseif (in_array($list_kata[$id], $token_variabel)) {
                 $temp = array(
-                    'token' => $list_kata[$id], 
+                    'token' => $list_kata[$id],
                     'class' => 'VariableIdent');
                 array_push($result_scanning, $temp);
                 $id++;
