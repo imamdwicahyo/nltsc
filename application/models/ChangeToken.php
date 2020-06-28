@@ -41,7 +41,9 @@ class ChangeToken extends CI_Model
         'KEYWORD_SQRT' => 'sqrt',
         'KEYWORD_ABS' => 'abs',
         'KEYWORD_OUTPUT2' => 'write',
-        'KEYWORD_IF' => 'if'
+        'KEYWORD_IF' => 'if',
+        'OR' => 'or'
+
 
     );
 
@@ -66,7 +68,7 @@ class ChangeToken extends CI_Model
             $class = $value['class'];
 
 
-            if ($class == "Keyword" or $class == "ArithmeticOperator" or $class == "KeywordElse" or $class == "KeywordIf") {
+            if ($class == "Keyword" or $class == "ArithmeticOperator" or $class == "KeywordElse" or $class == "KeywordIf" or $class == "LogicOperator") {
                 //mendapatkan parent dari token
                 $keyParent = array_search($token, $grammar_child);
                 $parent = $grammar_parent[$keyParent];

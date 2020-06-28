@@ -19,7 +19,7 @@ class CodeInsertion2 extends CI_Model
 
     // inisialisasi variabel lainnya
     var $diterima = 0;
-    var $max_loop = 100000;
+    var $max_loop = 1000000;
     var $key_token = 0;
     var $end_result = 0;
     var $list_token = array();
@@ -27,7 +27,9 @@ class CodeInsertion2 extends CI_Model
     var $max_token_success = 0;
     var $max_count_success = 0;
     // var $token_specific = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
-    var $token_specific = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
+
+    //token yang tidak dilakukan pengecekan (hanya ada di pascal)
+    var $token_specific = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')', 'then');
 
     var $temp_result = array();
 
@@ -42,6 +44,7 @@ class CodeInsertion2 extends CI_Model
         // membuat list token hasil dari scanning
         $this->create_list_token($input);
 
+        //var_dump($this->list_token);die;
         // mendapatkan grammar dari database
         $this->create_grammar();
 
@@ -148,7 +151,7 @@ class CodeInsertion2 extends CI_Model
             }
 
             $this->max_token_success = ($this->max_token_success < $this->key_token) ? $this->key_token : $this->max_token_success; //mendapatkan key_token paling tinggai
-            if (count($this->result) >= count($this->temp_result)) {
+            if (count($this->result) >  count($this->temp_result)) {
                 $this->temp_result = $this->result;
             }
             $count_loop++;
@@ -175,7 +178,7 @@ class CodeInsertion2 extends CI_Model
         array_pop($arr_rule);
         $this->stack[$this->end_stack]['rule'] = $arr_rule;
 
-        //update result 
+        //update result
         $this->result[$this->end_result] = $rule_name;
         $this->end_result = $this->end_result + 1;
         $this->stack[$this->end_stack]['end_result'] = $this->end_result;
@@ -288,10 +291,12 @@ class CodeInsertion2 extends CI_Model
     {
         foreach ($input as $key => $value) {
             if ($value['class'] != 'String') {
+              if ($value['class'] != ',') {
                 $temp = explode(' ', $value['token']);
                 foreach ($temp as $t) {
                     array_push($this->list_token, $t);
                 }
+              }
             } else {
                 $str = preg_replace('/[ ]/', '#', $value['token']);
                 array_push($this->list_token, $str);
