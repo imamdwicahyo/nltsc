@@ -29,6 +29,8 @@ class CodeInsertion2 extends CI_Model
     // var $token_specific = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
     var $token_specific = array('begin', 'end.', 'end', 'readln;', "'", ",", ";", '(', ')');
 
+    var $temp_result = array();
+
     /**
      * Fungsi process adalah fungsi utama dari tahap parsing
      * fungsi ini untuk mengecek kesesuaian token yang diinputkan oleh user dengan grammar NL yang ada didatabase
@@ -146,6 +148,9 @@ class CodeInsertion2 extends CI_Model
             }
 
             $this->max_token_success = ($this->max_token_success < $this->key_token) ? $this->key_token : $this->max_token_success; //mendapatkan key_token paling tinggai
+            if (count($this->result) >= count($this->temp_result)) {
+                $this->temp_result = $this->result;
+            }
             $count_loop++;
         }
 
@@ -154,8 +159,9 @@ class CodeInsertion2 extends CI_Model
             'loop' => $count_loop,
             'message' => $mesage,
             'result' => $this->result,
-            'token' => $this->list_token,
-            'stack' => $this->stack,
+            'temp' => $this->temp_result,
+            // 'token' => $this->list_token,
+            // 'stack' => $this->stack,
         );
 
         return $data;
