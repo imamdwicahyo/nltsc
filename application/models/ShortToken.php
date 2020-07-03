@@ -31,7 +31,7 @@ class ShortToken extends CI_Model
         $class_container = '';
         foreach ($changeToken as $key => $value) {
             if (in_array($value['token'], $operator)) {
-                if ((($changeToken[$key - 1]['class'] != 'VariableIdent') && ($changeToken[$key - 1]['class'] != 'Number') && ($changeToken[$key - 1]['class'] != 'String'))) {
+                if ((($changeToken[$key - 1]['class'] != 'VariableIdent') && ($changeToken[$key - 1]['class'] != 'Number') && ($changeToken[$key - 1]['class'] != 'String') && ($changeToken[$key - 1]['class'] != ')'))) {
                     // membetulkan posisi eksprsi
                     $token_container = $changeToken[$key + 1]['token'];
                     $class_container = $changeToken[$key + 1]['class'];
@@ -42,8 +42,6 @@ class ShortToken extends CI_Model
                 }
             }
         }
-
-
         $array_id = array();
         $array_penampung_token = array();
         $array_penampung_kelas = array();
