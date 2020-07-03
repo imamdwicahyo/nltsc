@@ -25,6 +25,12 @@ class ScanningV2 extends CI_Model
         $tandaBacaLama = array('.', ',');
         $tandaBacaBaru = array(' . ', ' , ');
         $text = str_replace($tandaBacaLama, $tandaBacaBaru, $text);
+        $tandaBacaLama = array('(', ')');
+        $tandaBacaBaru = array(' ( ', ' ) ');
+        $text = str_replace($tandaBacaLama, $tandaBacaBaru, $text);
+        $tandaBacaLama = array('+', '-', '*', '/');
+        $tandaBacaBaru = array(' + ', ' - ', ' * ', ' / ');
+        $text = str_replace($tandaBacaLama, $tandaBacaBaru, $text);
 
         //memecah teks yang dibatasi oleh spasi
         $list_kata = explode(" ", $text);
@@ -73,7 +79,7 @@ class ScanningV2 extends CI_Model
                 array_push($result_scanning, $temp);
                 $id++;
                 // echo "1 = ";
-            } elseif (($list_kata[$id] == '.') || ($list_kata[$id] == ',')) {
+            } elseif (($list_kata[$id] == '.') || ($list_kata[$id] == ',') || ($list_kata[$id] == '(') || ($list_kata[$id] == ')')) {
                 // jika token yang dicek adalah delimiter (titik dan koma)
                 $temp = array('token' => $list_kata[$id], 'class' => $list_kata[$id]);
                 array_push($result_scanning, $temp);
