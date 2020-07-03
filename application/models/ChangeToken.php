@@ -42,7 +42,8 @@ class ChangeToken extends CI_Model
         'KEYWORD_ABS' => 'abs',
         'KEYWORD_OUTPUT2' => 'write',
         'KEYWORD_IF' => 'if',
-        'OR' => 'or'
+        'OR' => 'or',
+        'KEYWORD_EXP' => 'exp',
 
 
     );
