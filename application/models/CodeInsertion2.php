@@ -218,7 +218,7 @@ class CodeInsertion2 extends CI_Model
     {
         $arr_rule = $this->stack[$this->end_stack]['rule']; //get array rule
         array_pop($arr_rule); // deleting last rule
-        $this->result[$this->end_result] = $token_name;
+        $this->result[$this->end_result] = str_replace("#"," ",$token_name);
         $this->key_token = $this->key_token + 1;
         $this->end_result = $this->end_result + 1;
         $this->stack[$this->end_stack]['rule'] = $arr_rule;

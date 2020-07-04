@@ -44,8 +44,10 @@ class ChangeToken extends CI_Model
         'KEYWORD_IF' => 'if',
         'OR' => 'or',
         'KEYWORD_EXP' => 'exp',
-
-
+        'KEYWORD_ARCTAN' => 'arctan',
+        'KEYWORD_LOG' => 'ln',
+        'KEYWORD_ROUND' => 'round',
+        'KEYWORD_SQR' => 'sqr',
     );
 
     function process($cleanToken)
