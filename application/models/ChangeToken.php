@@ -71,13 +71,25 @@ class ChangeToken extends CI_Model
             $class = $value['class'];
 
 
-            if ($class == "Keyword" or $class == "ArithmeticOperator" or $class == "KeywordElse" or $class == "KeywordIf" or $class == "LogicOperator") {
+            if ($class == "Keyword" or $class == "ArithmeticOperator" or $class == "KeywordElse" or $class == "KeywordIf") {
                 //mendapatkan parent dari token
                 $keyParent = array_search($token, $grammar_child);
                 $parent = $grammar_parent[$keyParent];
 
                 if (isset($this->array_change[$parent])) {
                     $cleanToken[$key]['token'] = $this->array_change[$parent];
+                }
+            } elseif ($class == "LogicOperator") {
+                switch ($token) {
+                    case 'dan':
+                        $cleanToken[$key]['token'] = 'and';
+                        break;
+                    case 'atau':
+                        $cleanToken[$key]['token'] = 'or';
+                        break;
+                    default:
+                        $cleanToken[$key]['token'] = $token;
+                        break;
                 }
             } elseif ($class == '.') {
                 $cleanToken[$key]['token'] = ';';
