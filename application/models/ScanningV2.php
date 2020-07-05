@@ -4,10 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class ScanningV2 extends CI_Model
 {
 
-    var $result_scanning = array();
-    var $result_token = array();
-    var $result_class = array();
-
     public function __construct()
     {
         parent::__construct();
@@ -71,7 +67,7 @@ class ScanningV2 extends CI_Model
         //mengklasifikasikan kata kedalam class class
         $id = 0;
         $max = count($list_kata);
-        $maka_if = 0;
+        $maka_if = 0; $dan_while = 0;
         while ($id < $max) {
             if (is_numeric($list_kata[$id]) || is_numeric(preg_replace('/[,]/', '', $list_kata[$id]))) {
                 // jika token yang dicek adalah number
@@ -140,6 +136,7 @@ class ScanningV2 extends CI_Model
                     $key = array_search($token,$list_token);
                     $class = $list_kelas[$key];
 
+                    // untuk menentukan token maka, apakah additional token atau keyword
                     if ($token == "jika") {
                         $maka_if = 1;
                     }
@@ -147,7 +144,22 @@ class ScanningV2 extends CI_Model
                         $class = "AdditionalToken";
                         $maka_if = 0;
                     }
-                    
+                    // end untuk menentukan token maka, apakah additional token atau keyword
+
+                    // untuk menentukan apakah kata 'dan' itu additional token atau logic operator
+                    if ($token == "ketika") {
+                        $dan_while = 1;
+                    }
+                    if ($token == "dan" OR $token == "maka") {
+                        if ($token == "dan" AND $dan_while == 0) {
+                            $class = "AdditionalToken";
+                        }
+                        if ($token == "maka") {
+                            $dan_while = 0;
+                        }
+                    }
+                    // end untuk menentukan apakah kata 'dan' itu additional token atau logic operator
+
                     $temp = array(
                       'token' => $token,
                       'class' => $class);
