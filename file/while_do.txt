@@ -1,0 +1,20 @@
+BUAT program uji1. buat variabel i dengan tipe data integer. ketika i kurang dari 10 maka tampilkan pengujian pertama while lalu i sama dengan 1 tambah i.
+BUAT program uji2. buat variabel x dan y dengan tipe data integer. ketika x kurang dari 10 maka tampilkan beri bilangan lalu baca y lalu x sama dengan 1 tambah x.
+BUAT program uji3. buat variabel a dan b dengan tipe data integer. ketika a kurang dari 10 maka b sama dengan b ditambah 2 lalu a sama dengan 1 tambah a. tampilkan b.
+BUAT program uji4. buat variabel a dan b dengan tipe data integer. ketika a kurang dari 10 maka b sama dengan b ditambah 3 lalu a sama dengan 1 tambah a. tampilkan bulan ke a. tampilkan tanggal ke b.
+BUAT program uji5. buat variabel i dengan tipe data integer. i sama dengan 5. ketika i kurang dari sama dengan 10 maka tampilkan ini diulangi sebanyak 5x lalu i sama dengan 1 tambah i.
+BUAT program uji6. buat variabel i dengan tipe data integer. ketika i sama dengan 6 maka tampilkan pengujian salah while lalu i sama dengan 1 tambah i.
+BUAT program uji7. buat variabel x dengan tipe data integer. tampilkan 1 ke 3. ketika x kurang dari sama dengan 4 maka tampilkan bilangan x lalu x sama dengan 1 tambah x.
+BUAT program uji8. buat variabel i dan j dengan tipe data integer.j bernilai 2. i sama dengan 1 ditambah j. ketika i kurang dari 8 maka tampilkan ini akan diulangi 4x lalu i sama dengan 1 tambah i.
+BUAT program uji9. buat variabel i dan j dengan tipe data integer. ketika i kurang dari 10 maka ketika j kurang dari 10 maka tampilkan while di dalam while lalu j sama dengan 1 tambah j lalu i sama dengan 1 tambah i.
+BUAT program uji10. buat variabel i, j dan k dengan tipe data integer. ketika i kurang dari 10 maka ketika j kurang dari 10 maka ketika k kurang dari 10 maka tampilkan while di dalam while lalu k sama dengan 1 tambah k lalu j sama dengan 1 tambah j lalu i sama dengan 1 tambah i.
+buat program uji41. buat variabel i dengan tipe data integer. ketika i kurang dari 25 maka tampilkan pengujian lalu tampilkan terulang lalu i sama dengan 1 tambah i. tampilkan tak terulang.
+buat program uji42. buat variabel j dengan tipe data integer. ketika j lebih dari 10 maka tampilkan terkurangi lalu j sama dengan 1 dikurang j.
+buat program uji43. buat variabel i dan j dengan tipe data integer. baca nilai i. ketika j lebih dari i maka tampilkan terulang sebanyak i lalu j sama dengan 1 dikurang j.
+buat program uji44. buat variabel j dengan tipe data integer dan i dengan tipe data string. i bernilai terulang. ketika j lebih dari i maka tampilkan i lalu j sama dengan 1 ditambah j.
+buat program uji45. buat variabel x dengan tipe data integer dan y dengan tipe data string. baca nilai y. ketika x kurang dari 7 maka tampilkan y lalu x sama dengan 1 ditambah x.
+buat program uji46. buat variabel a dengan tipe data integer dan b dengan tipe data real.a bernilai 10. ketika a lebih dari 7 maka b sama dengan 1 dibagi a lalu a sama dengan 1 dikurang a.
+buat program uji47. buat variabel a dengan tipe data integer dan b dengan tipe data real. b sama dengan 1 dibagi 3. ketika a kurang dari 10 maka tampilkan b lalu a sama dengan 1 tambah a. 
+buat program uji48. buat variabel j dengan tipe data integer dan i dengan tipe data string. i bernilai tak terulang. ketika j lebih dari i maka tampilkan terulang lalu j sama dengan 1 ditambah j. tampilkan i.
+buat program uji49. buat variabel i dan j dengan tipe data integer dan k dengan tipe data string. k sama dengan while di dalam while. ketika i kurang dari 10 maka ketika j kurang dari 10 maka tampilkan k lalu j sama dengan 1 tambah j lalu i sama dengan 1 tambah i.
+buat program uji50. buat variabel i dan j dengan tipe data integer. untuk iterasi 1 sampai 10 pada j maka ketika i kurang dari 10 maka tampilkan setelah for lalu i sama dengan 1 tambah i. 
