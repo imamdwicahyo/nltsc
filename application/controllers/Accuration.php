@@ -54,7 +54,7 @@ class Accuration extends CI_Controller
 		$data['casefolding'] = $casefolding;
 
 		//menggunakan fungsi filtering untuk menghapus karakter yg tdk diperlukan
-		$filtering = $mPrepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/]/");
+		$filtering = $mPrepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/\"\']/");
 		$data['filtering'] = $filtering;
 
 		//menggunakan fungsi scanning untuk memecah text kedalah class

@@ -46,9 +46,9 @@ class Process2 extends CI_Controller
 			$data['casefolding'] = $casefolding;
 
 			//menggunakan fungsi filtering untuk menghapus karakter yg tdk diperlukan
-			$filtering = $prepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/]/");
+			$filtering = $prepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/\"\']/");
 			$data['filtering'] = $filtering;
-
+			
 			//menggunakan fungsi scanning untuk memecah text kedalah class
 			$scanning = $mScanning->process($filtering);
 			$data['scanning'] = $scanning;
