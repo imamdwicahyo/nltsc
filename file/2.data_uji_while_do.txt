@@ -8,7 +8,7 @@ BUAT program uji7. buat variabel x dengan tipe data integer. tampilkan 1 ke 3. k
 BUAT program uji8. buat variabel i dan j dengan tipe data integer.j bernilai 2. i sama dengan 1 ditambah j. ketika i kurang dari 8 maka tampilkan ini akan diulangi 4x lalu i sama dengan 1 tambah i.
 BUAT program uji9. buat variabel i dan j dengan tipe data integer. ketika i kurang dari 10 maka ketika j kurang dari 10 maka tampilkan while di dalam while lalu j sama dengan 1 tambah j lalu i sama dengan 1 tambah i.
 BUAT program uji10. buat variabel i, j dan k dengan tipe data integer. ketika i kurang dari 10 maka ketika j kurang dari 10 maka ketika k kurang dari 10 maka tampilkan while di dalam while lalu k sama dengan 1 tambah k lalu j sama dengan 1 tambah j lalu i sama dengan 1 tambah i.
-buat program uji41. buat variabel i dengan tipe data integer. ketika i kurang dari 25 maka tampilkan pengujian lalu tampilkan terulang lalu i sama dengan 1 tambah i. tampilkan tak terulang.
+buat program uji41. buat variabel i dengan tipe data integer. ketika i kurang dari 25 maka tampilkan pengujian lalu tampilkan terulang lalu i sama dengan 1 tambah i. tampilkan tak terulang,
 buat program uji42. buat variabel j dengan tipe data integer. ketika j lebih dari 10 maka tampilkan terkurangi lalu j sama dengan 1 dikurang j.
 buat program uji43. buat variabel i dan j dengan tipe data integer. baca nilai i. ketika j lebih dari i maka tampilkan terulang sebanyak i lalu j sama dengan 1 dikurang j.
 buat program uji44. buat variabel j dengan tipe data integer dan i dengan tipe data string. i bernilai terulang. ketika j lebih dari i maka tampilkan i lalu j sama dengan 1 ditambah j.
