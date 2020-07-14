@@ -27,7 +27,7 @@ class ScanningV2 extends CI_Model
         $tandaBacaLama = array('+', '-', '*', '/');
         $tandaBacaBaru = array(' + ', ' - ', ' * ', ' / ');
         $text = str_replace($tandaBacaLama, $tandaBacaBaru, $text);
-        
+
         //memecah teks yang dibatasi oleh spasi
         $list_kata = explode(" ", $text);
 
@@ -75,13 +75,11 @@ class ScanningV2 extends CI_Model
                 $temp = array('token' => $list_kata[$id], 'class' => 'Number');
                 array_push($result_scanning, $temp);
                 $id++;
-                // echo "1 = ";
             } elseif (($list_kata[$id] == '.') || ($list_kata[$id] == ',') || ($list_kata[$id] == '(') || ($list_kata[$id] == ')')) {
                 // jika token yang dicek adalah delimiter (titik dan koma)
                 $temp = array('token' => $list_kata[$id], 'class' => $list_kata[$id]);
                 array_push($result_scanning, $temp);
                 $id++;
-                // echo "2 = ";
             } elseif ($id < $max - 5 and in_array($list_kata[$id] . ' ' . $list_kata[$id + 1] . ' ' . $list_kata[$id + 2] . ' ' . $list_kata[$id + 3] . ' ' . $list_kata[$id + 4], $list_token)) {
                 // jika lima kata yang dicek ada di tabel token_class
                 $token = $list_kata[$id] . ' ' . $list_kata[$id + 1] . ' ' . $list_kata[$id + 2] . ' ' . $list_kata[$id + 3] . ' ' . $list_kata[$id + 4];
@@ -93,7 +91,6 @@ class ScanningV2 extends CI_Model
                 );
                 array_push($result_scanning, $temp);
                 $id = $id + 5;
-                // echo "3 = ";
             } elseif ($id < $max - 4 and in_array($list_kata[$id] . ' ' . $list_kata[$id + 1] . ' ' . $list_kata[$id + 2] . ' ' . $list_kata[$id + 3], $list_token)) {
                 // jika empat kata yang dicek ada di tabel token_class
                 $token = $list_kata[$id] . ' ' . $list_kata[$id + 1] . ' ' . $list_kata[$id + 2] . ' ' . $list_kata[$id + 3];
@@ -105,7 +102,6 @@ class ScanningV2 extends CI_Model
                 );
                 array_push($result_scanning, $temp);
                 $id = $id + 4;
-                // echo "4 = ";
             } elseif ($id < $max - 3 and in_array($list_kata[$id] . ' ' . $list_kata[$id + 1] . ' ' . $list_kata[$id + 2], $list_token)) {
                 // jika tiga kata yang dicek ada di tabel token_class
                 $token = $list_kata[$id] . ' ' . $list_kata[$id + 1] . ' ' . $list_kata[$id + 2];
@@ -117,7 +113,6 @@ class ScanningV2 extends CI_Model
                 );
                 array_push($result_scanning, $temp);
                 $id = $id + 3;
-                // echo "5 = ";
             } elseif ($id < $max - 2 and in_array($list_kata[$id] . ' ' . $list_kata[$id + 1], $list_token)) {
                 // jika dua kata yang dicek ada di tabel token_class
                 $token = $list_kata[$id] . ' ' . $list_kata[$id + 1];
@@ -129,7 +124,30 @@ class ScanningV2 extends CI_Model
                 );
                 array_push($result_scanning, $temp);
                 $id = $id + 2;
-                // echo "6 = ";
+            } elseif ($id > 1 and ($list_kata[$id] == 'kalimat') and in_array($list_kata[$id - 1], array('tampil', 'tampilkan'))) {
+                // masukan token ke result scanning
+                $token = $list_kata[$id];
+                $key = array_search($token, $list_token);
+                $class = $list_kelas[$key];
+                $temp = array(
+                    'token' => $token,
+                    'class' => $class
+                );
+                array_push($result_scanning, $temp);
+
+                // buat token selanjutnya jadi string sampai ketemu token delimiter (koma atau titik)
+                $id++;
+                if (isset($list_kata[$id])) {
+                    $string = $list_kata[$id];
+                    $id++;
+                    while ($id < $max and ($list_kata[$id] != '.' and $list_kata[$id] != ',')) {
+                        $string = $string . " " . $list_kata[$id];
+                        $id++;
+                    }
+                    $temp = array('token' => $string, 'class' => 'String');
+                    array_push($result_scanning, $temp);
+                }
+                // END buat token selanjutnya jadi string sampai ketemu token delimiter (koma atau titik)
             } elseif (in_array($list_kata[$id], $list_token)) {
                 // jika satu kata yang dicek ada di tabel token_class
                 $token = $list_kata[$id];
@@ -148,16 +166,12 @@ class ScanningV2 extends CI_Model
                 // end untuk menentukan token maka, apakah additional token atau keyword
 
                 // untuk menentukan apakah kata 'dan' itu additional token atau logic operator
-                if ($token == "ketika") {
-                    $dan_while = 1;
+                if ($token == "dan" and in_array($list_kata[$id - 1], $token_variabel) and in_array($list_kata[$id + 1], $token_variabel)) {
+                    $class = "AdditionalToken";
                 }
-                if ($token == "dan" or $token == "maka") {
-                    if ($token == "dan" and $dan_while == 0) {
-                        $class = "AdditionalToken";
-                    }
-                    if ($token == "maka") {
-                        $dan_while = 0;
-                    }
+                $end_result = count($result_scanning) - 1;
+                if ($token == "dan" and count($result_scanning > 0) and $result_scanning[$end_result]['class'] == "Keyword") {
+                    $class = "AdditionalToken";
                 }
                 // end untuk menentukan apakah kata 'dan' itu additional token atau logic operator
 
@@ -168,7 +182,6 @@ class ScanningV2 extends CI_Model
                 array_push($result_scanning, $temp);
 
                 $id++;
-                // echo "7 = ";
             } elseif (in_array($list_kata[$id], $token_variabel)) {
                 $temp = array(
                     'token' => $list_kata[$id],
@@ -176,35 +189,11 @@ class ScanningV2 extends CI_Model
                 );
                 array_push($result_scanning, $temp);
                 $id++;
-                // echo "8 = ";
             } elseif ($list_kata[$id] == "") {
                 $id++;
-                // echo "9 = ";
             } else {
                 if ($id > 1 and ($list_kata[$id - 1] == 'program' || $list_kata[$id - 1] == 'aplikasi')) {
                     $temp = array('token' => $list_kata[$id], 'class' => 'ProgramIdent');
-                    array_push($result_scanning, $temp);
-                    $id++;
-                } elseif ($id > 1 and ($list_kata[$id] == '"')) {
-                    $id++;
-                    $string = $list_kata[$id];
-                    $id++;
-                    while ($id < $max and $list_kata[$id] != '"') {
-                        $string = $string . " " . $list_kata[$id];
-                        $id++;
-                    }
-                    $temp = array('token' => $string, 'class' => 'String');
-                    array_push($result_scanning, $temp);
-                    $id++;
-                } elseif ($id > 1 and ($list_kata[$id] == "'")) {
-                    $id++;
-                    $string = $list_kata[$id];
-                    $id++;
-                    while ($id < $max and $list_kata[$id] != "'") {
-                        $string = $string . " " . $list_kata[$id];
-                        $id++;
-                    }
-                    $temp = array('token' => $string, 'class' => 'String');
                     array_push($result_scanning, $temp);
                     $id++;
                 } else {
@@ -222,10 +211,8 @@ class ScanningV2 extends CI_Model
                         $id++;
                     }
                 }
-                // echo "10 = ";
             }
         }
-        // die;
         return $result_scanning;
     }
 
