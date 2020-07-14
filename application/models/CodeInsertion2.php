@@ -19,7 +19,7 @@ class CodeInsertion2 extends CI_Model
 
     // inisialisasi variabel lainnya
     var $diterima = 0;
-    var $max_loop = 300000;
+    var $max_loop = 500000;
     var $key_token = 0;
     var $end_result = 0;
     var $list_token = array();
@@ -180,7 +180,7 @@ class CodeInsertion2 extends CI_Model
         $this->grammar_parent = array();
         $this->grammar_child = array();
         $this->diterima = 0;
-        $this->max_loop = 300000;
+        $this->max_loop = 500000;
         $this->key_token = 0;
         $this->end_result = 0;
         $this->list_token = array();
