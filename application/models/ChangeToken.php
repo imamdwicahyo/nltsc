@@ -48,6 +48,7 @@ class ChangeToken extends CI_Model
         'KEYWORD_LOG' => 'ln',
         'KEYWORD_ROUND' => 'round',
         'KEYWORD_SQR' => 'sqr',
+        'END_LOOP' => 'end',
     );
 
     function process($cleanToken)
