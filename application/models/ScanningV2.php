@@ -184,6 +184,8 @@ class ScanningV2 extends CI_Model
                 if ($token == "maka" and $maka_if == 1) {
                     $class = "AdditionalToken";
                     $maka_if = 0;
+                    $samadengan_if = 0;
+                    $dan_if = 0;
                 }
                 // end untuk menentukan token maka, apakah additional token atau keyword
 
@@ -191,13 +193,7 @@ class ScanningV2 extends CI_Model
                     $maka_if = 1;
                     $samadengan_if = 1;
                     $dan_if = 1;
-                }
-                if ($token == "maka" AND $maka_if == 1) {
-                    $class = "AdditionalToken";
-                    $maka_if = 0;
-                    $samadengan_if = 0;
-                    $dan_if = 0;
-                }
+                }             
 
                 if ($token == "tampilkan") {
                     $tampilkan_ke = 1;
