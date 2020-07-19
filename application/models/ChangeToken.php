@@ -49,7 +49,7 @@ class ChangeToken extends CI_Model
         'KEYWORD_ROUND' => 'round',
         'KEYWORD_SQR' => 'sqr',
         'KEYWORD_CASE' => 'case',
-        'CHAR' => 'char'
+        'CHAR' => 'char',
         'END_LOOP' => 'end',
     );
 
