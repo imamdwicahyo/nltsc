@@ -157,45 +157,6 @@ class ScanningV2 extends CI_Model
                     'class' => $class
                 );
                 array_push($result_scanning, $temp);
-
-                    if ($token == "jika" OR $token == "jikalau" OR $token == "kalau" OR $token == "apabila" OR $token == "bila" ) {
-                        $maka_if = 1;
-                        $samadengan_if = 1;
-                        $dan_if = 1;
-                    }
-                    if ($token == "maka" AND $maka_if == 1) {
-                        $class = "AdditionalToken";
-                        $maka_if = 0;
-                        $samadengan_if = 0;
-                        $dan_if = 0;
-                    }
-
-                    if ($token == "tampilkan") {
-                        $tampilkan_ke = 1;
-                        $tampilkan_atau = 1;
-                        $tampilkan_bilangan = 1;
-                    }
-                    if ($token == "ke" AND $tampilkan_ke == 1) {
-                        $class = "String";
-                    }
-                    if ($token == "atau" AND $tampilkan_atau == 1) {
-                        $class = "String";
-                    }
-                    if ($token == "bilangan" AND $tampilkan_bilangan == 1) {
-                        $class = "String";
-                    }
-                    if ($token == "dan" AND $dan_if == 1) {
-                        $class = "LogicOperator";
-                    }
-                    if ($token == "lalu") {
-                      $tampilkan_ke = 0;
-                      $tampilkan_atau = 0;
-                      $tampilkan_bilangan = 0;
-                    }
-
-                    $temp = array(
-                      'token' => $token,
-                      'class' => $class);
                 // buat token selanjutnya jadi string sampai ketemu token delimiter (koma atau titik)
                 $id++;
                 if (isset($list_kata[$id])) {
@@ -225,6 +186,45 @@ class ScanningV2 extends CI_Model
                     $maka_if = 0;
                 }
                 // end untuk menentukan token maka, apakah additional token atau keyword
+
+                if ($token == "jika" OR $token == "jikalau" OR $token == "kalau" OR $token == "apabila" OR $token == "bila" ) {
+                    $maka_if = 1;
+                    $samadengan_if = 1;
+                    $dan_if = 1;
+                }
+                if ($token == "maka" AND $maka_if == 1) {
+                    $class = "AdditionalToken";
+                    $maka_if = 0;
+                    $samadengan_if = 0;
+                    $dan_if = 0;
+                }
+
+                if ($token == "tampilkan") {
+                    $tampilkan_ke = 1;
+                    $tampilkan_atau = 1;
+                    $tampilkan_bilangan = 1;
+                }
+                if ($token == "ke" AND $tampilkan_ke == 1) {
+                    $class = "String";
+                }
+                if ($token == "atau" AND $tampilkan_atau == 1) {
+                    $class = "String";
+                }
+                if ($token == "bilangan" AND $tampilkan_bilangan == 1) {
+                    $class = "String";
+                }
+                if ($token == "dan" AND $dan_if == 1) {
+                    $class = "LogicOperator";
+                }
+                if ($token == "lalu") {
+                  $tampilkan_ke = 0;
+                  $tampilkan_atau = 0;
+                  $tampilkan_bilangan = 0;
+                }
+
+                $temp = array(
+                  'token' => $token,
+                  'class' => $class);
 
                 // untuk menentukan apakah kata 'dan' itu additional token atau logic operator
                 if ($token == "dan" and in_array($list_kata[$id - 1], $token_variabel) and in_array($list_kata[$id + 1], $token_variabel)) {
