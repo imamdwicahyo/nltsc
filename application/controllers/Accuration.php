@@ -22,20 +22,25 @@ class Accuration extends CI_Controller
 
 	function index()
 	{
-		$myfile = fopen(base_url() . "file/while_do.txt", "r") or die("Unable to open file!");
-		$file 	=  fread($myfile, 100000);
-		fclose($myfile);
+		// input file data uji
+		$file_data_uji = fopen(base_url() . "file/1.data_uji_for_do.txt", "r") or die("Unable to open file!");
+		$list_data_uji 	=  fread($file_data_uji, 100000);
+		fclose($file_data_uji);
 
-		$list_input = explode("\n", $file);
+		// input file data harapan
+		$harapan_data_uji = fopen(base_url() . "file/1.harapan_uji_for_do.txt", "r") or die("Unable to open file!");
+		$list_harapan_uji 	=  fread($harapan_data_uji, 100000);
+		fclose($harapan_data_uji);
 
-		foreach ($list_input as $key => $input) {
-			echo "$input <br>";
-			echo "--> ".$this->proses_NLP($input);
-			echo "<br><br><hr><br>";
-		}
+		$list_input = explode("\n", $list_data_uji);
+		$list_hope = explode("\n", $list_harapan_uji);
+
+		$result = $this->proses_NLP($list_input, $list_hope);
+
+		$this->load->view('accuration_view', $result);
 	}
 
-	function proses_NLP($input)
+	function proses_NLP($list_input, $list_hope)
 	{
 		$data = [];
 
@@ -49,50 +54,80 @@ class Accuration extends CI_Controller
 		$mCodeInsertion = $this->CodeInsertion2;
 		$mTidyingToken = $this->TidyingToken;
 
-		//menggunakan fungsi casefolding untuk mendapatkan teks dengan huruf kecil
-		$casefolding = $mPrepocessing->casefolding($input);
-		$data['casefolding'] = $casefolding;
+		$result = array();
+		$benar = 0;
+		$salah = 0;
+		foreach ($list_input as $key => $input) {
+			//menggunakan fungsi casefolding untuk mendapatkan teks dengan huruf kecil
+			$casefolding = $mPrepocessing->casefolding($input);
+			$data['casefolding'] = $casefolding;
 
-		//menggunakan fungsi filtering untuk menghapus karakter yg tdk diperlukan
-		$filtering = $mPrepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/\"\']/");
-		$data['filtering'] = $filtering;
+			//menggunakan fungsi filtering untuk menghapus karakter yg tdk diperlukan
+			$filtering = $mPrepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/]/");
+			$data['filtering'] = $filtering;
 
-		//menggunakan fungsi scanning untuk memecah text kedalah class
-		$scanning = $mScanning->process($filtering);
-		$data['scanning'] = $scanning;
+			//menggunakan fungsi scanning untuk memecah text kedalah class
+			$scanning = $mScanning->process($filtering);
+			$data['scanning'] = $scanning;
 
-		//menggunakan fungsi parser untuk mengecek urutan token
-		$parsing = $mParsing->process($scanning);
-		$data['parsing'] = $parsing;
-		// var_dump($parsing);
-		// die;
+			//menggunakan fungsi parser untuk mengecek urutan token
+			$parsing = $mParsing->process($scanning);
+			$data['parsing'] = $parsing;
+			// var_dump($parsing);
+			// die;
 
+			$tdying = "";
+			if ($parsing['diterima'] == '1') {
+				$cleanToken = $mRemoveAdditionalToken->process($parsing['scanning']);
+				$data['cleanToken'] = $cleanToken;
 
-		if ($parsing['diterima'] == '1') {
-			$cleanToken = $mRemoveAdditionalToken->process($parsing['scanning']);
-			$data['cleanToken'] = $cleanToken;
+				$changeToken = $mChangeToken->process($cleanToken);
+				$data['changeToken'] = $changeToken;
 
-			$changeToken = $mChangeToken->process($cleanToken);
-			$data['changeToken'] = $changeToken;
+				$shortToken = $mShortToken->process($changeToken);
+				$data['shortToken'] = $shortToken;
 
-			$shortToken = $mShortToken->process($changeToken);
-			$data['shortToken'] = $shortToken;
+				$codeInsertion = $mCodeInsertion->process($shortToken);
+				$data['codeInsertion'] = $codeInsertion;
 
-			$codeInsertion = $mCodeInsertion->process($shortToken);
-			$data['codeInsertion'] = $codeInsertion;
-			// var_dump($codeInsertion);
+				$tdying = $mTidyingToken->process($codeInsertion['result']);
+				$data['tdying'] = $tdying;
+			}
+			$hope  = preg_replace('/[\n\r]/', '', $list_hope[$key]);
+			$hope2 = $mTidyingToken->process(explode(" ", $hope));
 
-			$tdying = $mTidyingToken->process($codeInsertion['result']);
-			$data['tdying'] = $tdying;
+			if ($hope2 == $tdying) {
+				$status = "benar";
+				$benar++;
+			} else {
+				$status = "salah";
+				$salah++;
+			}
+
+			$loop_insertion = 0;
+			if (isset($codeInsertion)) {
+				$loop_insertion = $codeInsertion['loop'];
+			}
+			$temp = array(
+				'kalimat' => $input."(".$parsing['loop'].")",
+				'harapan' => $hope2,
+				'hasil'   => $tdying."(".$loop_insertion.")",
+				'status'  => $status,
+			);
+			array_push($result, $temp);
 		}
 
-		$data['input'] = $input;
-		$data['status_parsing'] = TRUE;
+		$hasil_uji = array(
+			'benar' => $benar,
+			'salah' => $salah,
+			'total' => count($list_input),
+			'akurasi' => $benar / count($list_input) * 100,
+		);
 
-		if (isset($codeInsertion['diterima']) and $codeInsertion['diterima'] == 1) {
-			return implode(" ",$codeInsertion['result']);
-		}else{
-			return NULL;
-		}
+		$data = array(
+			'result' => $result,
+			'hasil_uji' => $hasil_uji,
+		);
+		return $data;
 	}
 }
