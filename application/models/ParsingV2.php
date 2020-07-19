@@ -47,7 +47,7 @@ class ParsingV2 extends CI_Model
         // masukan rule(child) dengan parent 'START' pada stack
         $key = array_search("START", $this->grammar_parent); //cari key dari grammar parent
         $arr_rule = $this->add_array_rule(NULL, $this->grammar_child[$key]); //buat array rule baru
-        $parsing = $this->create_result_parsing($this->key_token,$arr_rule); //buat info hasil penurunan
+        $parsing = $this->create_result_parsing($this->key_token, $arr_rule); //buat info hasil penurunan
         $this->add_to_stack($arr_rule, $this->key_token, array($parsing)); //buat stack baru
 
         // mulai proses penurunan
@@ -71,15 +71,15 @@ class ParsingV2 extends CI_Model
                     // turunkan rule lalu masukan ke arr_rule
                     $arr_rule = $this->add_array_rule($arr_rule, $child); // memasukan child ke array rule
                     $this->stack[$this->end_stack]['rule'] = $arr_rule; // ubah array rule lama ke array rule yang baru di stack
-                    $parsing = $this->create_result_parsing($this->key_token,$arr_rule); // membuat info hasil penurunan
-                    array_push($arr_parsing,$parsing); // memasukan info hasil penurunan ke array parsing
+                    $parsing = $this->create_result_parsing($this->key_token, $arr_rule); // membuat info hasil penurunan
+                    array_push($arr_parsing, $parsing); // memasukan info hasil penurunan ke array parsing
                     $this->stack[$this->end_stack]['result_parsing'] = $arr_parsing; // update array parsing ke yang terbaru
                 } else {
                     foreach ($arr_child as $key => $child) {
                         $new_arr_rule = $this->add_array_rule($arr_rule, $child); // membuat array rule baru
                         $new_arr_parsing = $arr_parsing;   // membuat array parsing baru
-                        $parsing = $this->create_result_parsing($this->key_token,$new_arr_rule); // membuat info hasil penurunan
-                        array_push($new_arr_parsing,$parsing); //memasukan info hasil penurunan ke array parsing baru
+                        $parsing = $this->create_result_parsing($this->key_token, $new_arr_rule); // membuat info hasil penurunan
+                        array_push($new_arr_parsing, $parsing); //memasukan info hasil penurunan ke array parsing baru
                         $this->add_to_stack($new_arr_rule, $this->key_token, $new_arr_parsing); //menambahkan stack baru dengan array rule dan array parsing yang baru
                         $this->end_stack = $this->end_stack + 1; //tambahkan var end_stack dengan angka 1;
                     }
@@ -112,7 +112,7 @@ class ParsingV2 extends CI_Model
                 }
             }
 
-            $this->max_token_success = ($this->max_token_success < $this->key_token) ? $this->key_token : $this->max_token_success ; //mendapatkan key_token paling tinggai
+            $this->max_token_success = ($this->max_token_success < $this->key_token) ? $this->key_token : $this->max_token_success; //mendapatkan key_token paling tinggai
             $count_loop++;
         }
 
@@ -120,13 +120,28 @@ class ParsingV2 extends CI_Model
             'diterima' => $this->diterima,
             'loop' => $count_loop,
             'message' => $this->create_message(),
-            'result' => ($this->stack != NULL) ? $this->stack[$this->end_stack]['result_parsing'] : "" ,
+            'result' => ($this->stack != NULL) ? $this->stack[$this->end_stack]['result_parsing'] : "",
             'scanning' => $input,
             // 'stack' => $this->stack,
             // 'token' => $this->list_token,
         );
-        
+
+        $this->restore_variables(); //untuk mengebalikan isi variabel global
         return $data;
+    }
+
+    /** Funsi untuk mengembalikan isi variabel global */
+    public function restore_variables()
+    {
+        $this->stack = array();
+        $this->end_stack = 0;
+        $this->grammar_parent = array();
+        $this->grammar_child = array();
+        $this->diterima = 0;
+        $this->max_loop = 100000;
+        $this->key_token = 0;
+        $this->list_token = array();
+        $this->max_token_success = 0;
     }
 
     /** Fungsi untuk menampilkan pesan eror */
@@ -134,27 +149,27 @@ class ParsingV2 extends CI_Model
     {
         if ($this->diterima == 0) {
             $text = "";
-            for ($i=0; $i <= $this->max_token_success ; $i++) { 
-                $text = $text." ".$this->list_token[$i];
+            for ($i = 0; $i <= $this->max_token_success; $i++) {
+                $text = $text . " " . $this->list_token[$i];
             }
-            return "Message: Terjadi kesalahan kata ".$this->list_token[$this->max_token_success].". Kalimat : \"$text.......\"";
-        }else{
-            return implode(" ",$this->list_token);
+            return "Message: Terjadi kesalahan kata " . $this->list_token[$this->max_token_success] . ". Kalimat : \"$text.......\"";
+        } else {
+            return implode(" ", $this->list_token);
         }
     }
 
     /** Fungsi untuk mendapatkan informasi penurunan grammar NL */
-    public function create_result_parsing($key_token,$arr_rule)
+    public function create_result_parsing($key_token, $arr_rule)
     {
         if ($key_token > 0) {
             $text = "";
-            for ($i=0; $i < $key_token ; $i++) { 
-                $text = $text.$this->list_token[$i]." ";
+            for ($i = 0; $i < $key_token; $i++) {
+                $text = $text . $this->list_token[$i] . " ";
             }
-            $rule = implode(" ",array_reverse($arr_rule));
-            return $text.$rule;
-        }else{
-            return implode(" ",array_reverse($arr_rule));
+            $rule = implode(" ", array_reverse($arr_rule));
+            return $text . $rule;
+        } else {
+            return implode(" ", array_reverse($arr_rule));
         }
     }
 
@@ -175,7 +190,7 @@ class ParsingV2 extends CI_Model
             array_pop($this->stack);
             $this->end_stack = count($this->stack) - 1;
             $this->key_token = $this->stack[$this->end_stack]['key_token'];
-        }else{
+        } else {
             array_pop($this->stack);
         }
     }

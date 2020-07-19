@@ -49,7 +49,7 @@ class Process2 extends CI_Controller
 			//menggunakan fungsi filtering untuk menghapus karakter yg tdk diperlukan
 			$filtering = $prepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/]/");
 			$data['filtering'] = $filtering;
-
+			
 			//menggunakan fungsi scanning untuk memecah text kedalah class
 			$scanning = $mScanning->process($filtering);
 			$data['scanning'] = $scanning;			
@@ -57,8 +57,7 @@ class Process2 extends CI_Controller
 			//menggunakan fungsi parser untuk mengecek urutan token
 			$parsing = $parsing->process($scanning);
 			$data['parsing'] = $parsing;
-			// var_dump($parsing);
-			// die;
+			// var_dump($parsing);die;
 
 
 			if ($parsing['diterima'] == '1') {

@@ -19,7 +19,7 @@
                 <h5 class="card-header text-center">Masukkan</h5>
                 <div class="card-body">
                     <h5 class="card-title">Teks Masukan</h5>
-                    <form class="" action="<?php echo base_url() ?>" method="post" enctype="multipart/form-data">
+                    <form class="" action="<?php echo base_url()."process" ?>" method="post" enctype="multipart/form-data">
                         <div class="form-group">
 							<table border="0" width="100%">
                                 <tr>

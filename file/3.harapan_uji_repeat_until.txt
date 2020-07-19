@@ -1,0 +1,20 @@
+program uji1 ; var i : integer ; begin repeat begin writeln ('hello world') ; i := 1 + i ; end ; until i > 10 ; readln; end.
+program uji2 ; var i , j : integer ; begin repeat begin readln ( j ) ; i := 1 + i ; end ; until i > 10 ; readln; end.
+program uji3 ; var a : integer ; begin repeat begin writeln ('tanggal') ; writeln ( a ) ; a := 1 + a ; end ; until a > 10 ; readln; end.
+program uji4 ; var c : integer ; begin writeln ('hitung 100x') ; repeat begin writeln ( c ) ; c := 1 + c ; end ; until c > 100 ; readln; end.
+program uji5 ; var v : integer ; begin v := 2 ; repeat begin writeln ( v ) ; v := 1 + v ; end ; until v > 12 ; readln; end.
+program uji6 ; var v : integer ; begin v := 2 + 1 ; writeln ('mengulang kata') ; repeat begin writeln ('kata') ; v := 1 + v ; end ; until v > 12 ; readln; end.
+program uji7 ; var i : integer ; begin repeat begin writeln ('menampilkan di dalam repeat') ; i := 1 + i ; end ; until i > 10 ; writeln ('menampilkan di luar repeat') ; readln; end.
+program uji8 ; var i , hitung : integer ; begin repeat begin writeln ( 'hitung' ) ; writeln ( i ) ; i := 1 + i ; end ; until i > 10 ; readln; end.
+program uji9 ; var j , i : integer ; begin repeat begin for j := 1 to 10 do begin writeln ('benar') ; end ; i := 1 + i ; end ; until i > 10 ; readln; end.
+program uji10 ; var i : integer ; begin repeat begin writeln ('tampilan pertama') ; i := i + 1 ; end ; until i < 10 ; for i := 1 to 10 do begin writeln ('benar') ; end ; readln; end.
+program uji51 ; var i : integer ; j : string ; begin j := ' ini ' ; repeat begin writeln ( j ) ; i := 1 + i ; end ; until i > 13 ; readln; end.
+program uji52 ; var i : integer ; begin repeat begin writeln ('menampilkan didalam repeat') ; i := 1 + i ; end ; until i > 8 ; writeln ('menampilkan diluar repeat') ; readln; end.
+program uji53 ; var x : integer ; begin writeln ('sebelum repeat') ; repeat begin writeln ('didalam repeat') ; x := 1 + x ; end ; until x > 8 ; writeln ('sesudah repeat') ; readln; end.
+program uji54 ; var a : integer ; b : string ; begin readln ( b ) ; repeat begin writeln ( b ) ; a := 1 + a ; end ; until a > 7 ; readln; end.
+program uji55 ; var x , y : integer ; begin readln ( y ) ; repeat begin writeln ( y ) ; x := 1 + x ; end ; until x > y ; readln; end.
+program uji56 ; var x : integer ; y : string ; begin readln ( y ) ; repeat begin writeln ('berhitung') ; x := 1 + x ; end ; until x > 9 ; writeln ( y ) ; readln; end.
+program uji57 ; var i : integer ; terpecah : real ; begin terpecah := 1 / 5 ; repeat begin writeln ( terpecah ) ; i := 1 + i ; end ; until i > 6 ; readln; end.
+program uji58 ; var i : integer ; terpecah : real ; begin repeat begin terpecah := 3 / i ; i := 1 + i ; end ; until i > 11 ; readln; end.
+program uji59 ; var j , i : integer ; begin repeat begin for j := 9 downto 1 do begin writeln ('repeat for') ; end ; i := 1 + i ; end ; until i > 10 ; readln; end.
+program uji60 ; var i , j : integer ; begin repeat begin writeln ('tampilan pertama') ; i := i + 1 ; end ; until i < 10 ; repeat begin writeln ('tampilan kedua') ; j := j + 1 ; end ; until j < 10 ; readln; end.

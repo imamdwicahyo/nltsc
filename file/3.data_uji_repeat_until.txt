@@ -1,0 +1,20 @@
+BUAT program uji1. buat variabel i dengan tipe data integer. ulangi tampilkan hello world kemudian i bernilai 1 tambah i sehingga i lebih besar 10.
+BUAT program uji2. buat variabel i dan j dengan tipe data integer. ulangi baca j kemudian i bernilai 1 tambah i sehingga i lebih besar 10.
+BUAT program uji3. buat variabel a dengan tipe data integer. ulangi tampilkan tanggal lalu tampilkan a kemudian a sama dengan 1 tambah a sehingga a lebih besar 10.
+BUAT program uji4. buat variabel c dengan tipe data integer. tampilkan hitung 100x. ulangi tampilkan c kemudian c bernilai 1 tambah c sehingga c lebih besar 100.
+BUAT program uji5. buat variabel v dengan tipe data integer. v bernilai 2. ulangi tampilkan v kemudian v bernilai 1 tambah v sehingga v lebih besar 12.
+BUAT program uji6. buat variabel v dengan tipe data integer. v bernilai 2 ditambah 1. tampilkan mengulang kata. ulangi tampilkan kata kemudian v bernilai 1 tambah v sehingga v lebih besar 12.
+BUAT program uji7. buat variabel i dengan tipe data integer. ulangi tampilkan menampilkan di dalam repeat kemudian i bernilai 1 tambah i sehingga i lebih besar 10. tampilkan menampilkan di luar repeat.
+BUAT program uji8. buat variabel i dan hitung dengan tipe data integer. ulangi tampilkan hitung lalu tampilkan i kemudian i bernilai 1 tambah i sehingga i lebih besar 10.
+BUAT program uji9. buat variabel j dan i dengan tipe data integer. ulangi untuk iterasi 1 sampai 10 pada j maka tampilkan "benar" kemudian i bernilai 1 tambah i sehingga i lebih besar 10.
+BUAT program uji10. buat variabel i dengan tipe data integer. ulangi tampilkan tampilan pertama lalu i bernilai i ditambah 1 sehingga i kurang dari 10. untuk iterasi i bernilai 1 sampai 10 maka tampilkan "benar".
+buat program uji51. buat variabel i dengan tipe data integer dan j dengan tipe data string. j bernilai ini. ulangi tampilkan j kemudian i bernilai 1 tambah i sehingga i lebih besar 13.
+buat program uji52. buat variabel i dengan tipe data integer. ulangi tampilkan menampilkan didalam repeat kemudian i bernilai 1 tambah i sehingga i lebih besar 8. tampilkan menampilkan diluar repeat.
+buat program uji53. buat variabel x dengan tipe data integer. tampilkan sebelum repeat. ulangi tampilkan didalam repeat kemudian x bernilai 1 tambah x sehingga x lebih besar 8. tampilkan sesudah repeat.
+buat program uji54. buat variabel a dengan tipe data integer dan b dengan tipe data string. baca nilai b. ulangi tampilkan b kemudian a bernilai 1 tambah a sehingga a lebih besar 7.
+buat program uji55. buat variabel x dan y dengan tipe data integer. baca nilai y. ulangi tampilkan y kemudian x bernilai 1 tambah x sehingga x lebih besar y.
+buat program uji56. buat variabel x dengan tipe data integer dan y dengan tipe data string. baca nilai y. ulangi tampilkan berhitung kemudian x bernilai 1 tambah x sehingga x lebih besar 9. tampilkan y.
+buat program uji57. buat variabel i dengan tipe data integer dan terpecah dengan tipe data real. terpecah bernilai 1 dibagi 5. ulangi tampilkan terpecah kemudian i bernilai 1 tambah i sehingga i lebih besar 6.
+buat program uji58. buat variabel i dengan tipe data integer dan terpecah dengan tipe data real. ulangi terpecah bernilai 3 dibagi i kemudian i bernilai 1 tambah i sehingga i lebih besar 11.
+buat program uji59. buat variabel j dan i dengan tipe data integer. ulangi untuk iterasi 9 menurun 1 pada j maka tampilkan repeat for kemudian i bernilai 1 tambah i sehingga i lebih besar 10.
+buat program uji60. buat variabel i dan j dengan tipe data integer. ulangi tampilkan tampilan pertama lalu i bernilai i ditambah 1 sehingga i kurang dari 10. ulangi tampilkan tampilan kedua lalu j bernilai j ditambah 1 sehingga j kurang dari 10.

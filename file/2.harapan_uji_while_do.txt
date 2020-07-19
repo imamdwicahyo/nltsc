@@ -1,0 +1,20 @@
+program uji1 ; var i : integer ; begin while i < 10 do begin writeln ('pengujian pertama while') ; i := 1 + i ; end ; readln; end.
+program uji2 ; var x , y : integer ; begin while x < 10 do begin writeln ('beri bilangan') ; readln ( y ) ; x := 1 + x ; end ; readln; end.
+program uji3 ; var a , b : integer ; begin while a < 10 do begin b := b + 2 ; a := 1 + a ; end ; writeln ( b ) ; readln; end.
+program uji4 ; var a , b : integer ; begin while a < 10 do begin b := b + 3 ; a := 1 + a ; end ; writeln ('bulan ke ' , a ) ; writeln ('tanggal ke ' , b ) ; readln; end.
+program uji5 ; var i : integer ; begin i := 5 ; while i <= 10 do begin writeln ('ini diulangi sebanyak 5x') ; i := 1 + i ; end ; readln; end.
+program uji6 ; var i : integer ; begin while i = 6 ; do begin writeln ('pengujian salah while') ; i := 1 + i ; end ; readln; end.
+program uji7 ; var x : integer ; begin writeln ( 1 , ' ke ' , 3 ) ; while x <= 4 do begin writeln ('bilangan ' , x ) ; x := 1 + x ; end ; readln; end.
+program uji8 ; var i , j : integer ; begin j := 2 ; i := 1 + j ; while i < 8 do begin writeln ('ini akan diulangi 4x') ; i := 1 + i ; end ; readln; end.
+program uji9 ; var i , j : integer ; begin while i < 10 do begin while j < 10 do begin writeln ('while di dalam while') ; j := 1 + j ; end ; i := 1 + i ; end ; readln; end.
+program uji10 ; var i , j , k : integer ; begin while i < 10 do begin while j < 10 do begin while k < 10 do begin writeln ('while di dalam while') ; k := 1 + k ; end ; j := 1 + j ; end ; i := 1 + i ; end ; readln; end.
+program uji41 ; var i : integer ; begin while i < 25 do begin writeln ('pengujian') ; writeln ('terulang') ; i := 1 + i ; end ; writeln ('tak terulang') ; readln; end.
+program uji42 ; var j : integer ; begin while j > 10 do begin writeln ('terkurangi') ; j := 1 - j ; end ; readln; end.
+program uji43 ; var i , j : integer ; begin readln ( i ) ; while j > i do begin writeln ('terulang sebanyak ' , i ) ; j := 1 - j ; end ; readln; end.
+program uji44 ; var j : integer ; i : string ; begin i := ' terulang ' ; while j > i do begin writeln ( i ) ; j := 1 + j ; end ; readln; end.
+program uji45 ; var x : integer ; y : string ; begin readln ( y ) ; while x < 7 do begin writeln ( y ) ; x := 1 + x ; end ; readln; end.
+program uji46 ; var a : integer ; b : real ; begin a := 10 ; while a > 7 do begin b := 1 / a ; a := 1 - a ; end ; readln; end.
+program uji47 ; var a : integer ; b : real ; begin b := 1 / 3 ; while a < 10 do begin writeln ( b ) ; a := 1 + a ; end ; readln; end.
+program uji48 ; var j : integer ; i : string ; begin i := ' tak terulang ' ; while j > i do begin writeln ('terulang') ; j := 1 + j ; end ; writeln ( i ) ; readln; end.
+program uji49 ; var i , j : integer ; k : string ; begin k := ' while di dalam while ' ; while i < 10 do begin while j < 10 do begin writeln ( k ) ; j := 1 + j ; end ; i := 1 + i ; end ; readln; end.
+program uji50 ; var i , j : integer ; begin for j := 1 to 10 do begin while i < 10 do begin writeln ('setelah for') ; i := 1 + i ; end ; end ; readln; end.

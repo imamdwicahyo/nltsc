@@ -50,6 +50,7 @@ class ChangeToken extends CI_Model
         'KEYWORD_SQR' => 'sqr',
         'KEYWORD_CASE' => 'case',
         'CHAR' => 'char'
+        'END_LOOP' => 'end',
     );
 
     function process($cleanToken)

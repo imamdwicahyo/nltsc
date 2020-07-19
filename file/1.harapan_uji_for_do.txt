@@ -1,0 +1,20 @@
+program uji1 ; var a , i : integer ; begin for i := 1 to 10 do begin readln ( a ) ; end ; readln; end.
+program uji2 ; var i : integer ; begin for i := 1 to 10 do begin writeln ('benar') ; end ; readln; end.
+program uji3 ; var i , j : integer ; begin for i := 1 to 10 do begin j := j + 1 ; end ; readln; end.
+program uji4 ; var i : integer ; begin writeln ('berhitung') ; for i := 1 to 10 do begin writeln ( i ) ; end ; readln; end.
+program uji5 ; var i : integer ; begin for i := 1 to 10 do begin writeln ('hitungan ke') ; writeln ( i ) ; end ; readln; end.
+program uji6 ; var i , j , k : integer ; begin for i := 1 to 10 do begin j := j + 1 ; readln ( j ) ; end ; writeln ('bilangan ke ' , j ) ; readln; end.
+program uji7 ; var a , i : integer ; begin i := 3 ; for i := 1 to 10 do begin writeln ('hello') ; end ; readln; end.
+program uji8 ; var i : integer ; begin for i := 1 to 10 do begin writeln ( 1 , ' , ' , 2 , ' atau ' , 3 ) ; end ; readln; end.
+program uji9 ; var i , j : integer ; begin for i := 1 to 10 do begin for j := 1 to 10 do begin writeln ('bisa') ; end ; end ; readln; end.
+program uji10 ; var i , j , k : integer ; begin for i := 1 to 10 do begin for j := 1 to 10 do begin for k := 1 to 10 do begin writeln ('benar') ; end ; end ; end ; readln; end.
+program uji31 ; var x : string ; y : integer ; begin x := ' akan terulang ' ; for y := 1 to 10 do begin writeln ( x ) ; end ; readln; end.
+program uji32 ; var a : integer ; begin for a := 9 downto 1 do begin writeln ('menurunkan') ; end ; readln; end.
+program uji33 ; var x : string ; y : integer ; begin readln ( x ) ; for y := 1 to 5 do begin writeln ( x ) ; end ; readln; end.
+program uji34 ; var a , b : integer ; begin readln ( b ) ; for a := b downto 1 do begin writeln ('menurunkan sebanyak') ; end ; readln; end.
+program uji35 ; var y , x : integer ; begin readln ( x ) ; for y := 1 to x do begin writeln ('menaikan sebanyak') ; end ; readln; end.
+program uji36 ; var y : real ; x : integer ; begin for x := 7 downto 2 do begin y := 3 / x ; writeln ( y ) ; end ; readln; end.
+program uji37 ; var y , z : integer ; x : real ; begin z := 3 ; for y := 4 to 8 do begin y := 3 + z ; x := y / z ; end ; writeln ( x ) ; readln; end.
+program uji38 ; var i , j : integer ; k : string ; begin k := ' aku siap ' ; for i := 1 to 10 do begin for j := 1 to 10 do begin writeln ( k ) ; end ; end ; readln; end.
+program uji39 ; var x , y : integer ; begin for x := 1 to 5 do begin for y := 9 downto 6 do begin writeln ('naik turun') ; end ; end ; readln; end.
+program uji40 ; var i , j : integer ; begin for i := 4 downto 1 do begin for j := 8 downto 2 do begin writeln ('turun turun') ; end ; end ; readln; end.
