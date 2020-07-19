@@ -72,6 +72,12 @@ class ScanningV2 extends CI_Model
         $id = 0;
         $max = count($list_kata);
         $maka_if = 0;
+        $tampilkan_ke = 0;
+        $tampilkan_atau = 0;
+        $tampilkan_bilangan = 0;
+        $samadengan_if = 0;
+        $dan_if = 0;
+
         while ($id < $max) {
             if (is_numeric($list_kata[$id]) || is_numeric(preg_replace('/[,]/', '', $list_kata[$id]))) {
                 // jika token yang dicek adalah number
@@ -81,6 +87,13 @@ class ScanningV2 extends CI_Model
                 // echo "1 = ";
             } elseif (($list_kata[$id] == '.') || ($list_kata[$id] == ',') || ($list_kata[$id] == '(') || ($list_kata[$id] == ')')) {
                 // jika token yang dicek adalah delimiter (titik dan koma)
+                if (($list_kata[$id] == '.') || ($list_kata[$id] == ',')){
+                  $tampilkan_ke = 0;
+                  $tampilkan_atau = 0;
+                  $tampilkan_bilangan = 0;
+                  $dan_if = 0;
+                }
+
                 $temp = array('token' => $list_kata[$id], 'class' => $list_kata[$id]);
                 array_push($result_scanning, $temp);
                 $id++;
@@ -126,6 +139,16 @@ class ScanningV2 extends CI_Model
                 $token = $list_kata[$id] . ' ' . $list_kata[$id + 1];
                 $key = array_search($token,$list_token);
                 $class = $list_kelas[$key];
+
+                if ($token == "tampilkan kebawah") {
+                  $tampilkan_ke = 1;
+                  $tampilkan_atau = 1;
+                  $tampilkan_bilangan = 1;
+                }
+                if ($token == "sama dengan" AND $samadengan_if == 1) {
+                    $class = "ArithmeticOperator2";
+                }
+
                 $temp = array(
                     'token' => $token,
                     'class' => $class
@@ -140,14 +163,41 @@ class ScanningV2 extends CI_Model
                     $key = array_search($token,$list_token);
                     $class = $list_kelas[$key];
 
-                    if ($token == "jika") {
+                    if ($token == "jika" OR $token == "jikalau" OR $token == "kalau" OR $token == "apabila" OR $token == "bila" ) {
                         $maka_if = 1;
+                        $samadengan_if = 1;
+                        $dan_if = 1;
                     }
                     if ($token == "maka" AND $maka_if == 1) {
                         $class = "AdditionalToken";
                         $maka_if = 0;
+                        $samadengan_if = 0;
+                        $dan_if = 0;
                     }
-                    
+
+                    if ($token == "tampilkan") {
+                        $tampilkan_ke = 1;
+                        $tampilkan_atau = 1;
+                        $tampilkan_bilangan = 1;
+                    }
+                    if ($token == "ke" AND $tampilkan_ke == 1) {
+                        $class = "String";
+                    }
+                    if ($token == "atau" AND $tampilkan_atau == 1) {
+                        $class = "String";
+                    }
+                    if ($token == "bilangan" AND $tampilkan_bilangan == 1) {
+                        $class = "String";
+                    }
+                    if ($token == "dan" AND $dan_if == 1) {
+                        $class = "LogicOperator";
+                    }
+                    if ($token == "lalu") {
+                      $tampilkan_ke = 0;
+                      $tampilkan_atau = 0;
+                      $tampilkan_bilangan = 0;
+                    }
+
                     $temp = array(
                       'token' => $token,
                       'class' => $class);

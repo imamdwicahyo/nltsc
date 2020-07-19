@@ -24,8 +24,7 @@ class ChangeToken extends CI_Model
         'BIG_OPR' => '>',
         'SMALL_OPR' => '<',
         'BIG_SAME_OPR' => '>=',
-        'SMALL_SAME_OPR' => '<=',
-        'EQUALS_OPR' => '=',
+        'SMALL_SAME_OPR' => '<=',        
         'NOT_EQUALS_OPR' => '<>',
         'KEYWORD_WHILE' => 'while',
         'KEYWORD_FOR' => 'for',
@@ -42,12 +41,15 @@ class ChangeToken extends CI_Model
         'KEYWORD_ABS' => 'abs',
         'KEYWORD_OUTPUT2' => 'write',
         'KEYWORD_IF' => 'if',
+        'KEYWORD_ELSE' => 'else',
         'OR' => 'or',
         'KEYWORD_EXP' => 'exp',
         'KEYWORD_ARCTAN' => 'arctan',
         'KEYWORD_LOG' => 'ln',
         'KEYWORD_ROUND' => 'round',
         'KEYWORD_SQR' => 'sqr',
+        'KEYWORD_CASE' => 'case',
+        'CHAR' => 'char'
     );
 
     function process($cleanToken)
@@ -66,12 +68,16 @@ class ChangeToken extends CI_Model
             }
         }
 
+        $jika_samadengan = 0;
         foreach ($cleanToken as $key => $value) {
             $token = $value['token'];
             $class = $value['class'];
+            if ($token == 'jika') {
+              $jika_samadengan = 1;
+            }
 
 
-            if ($class == "Keyword" or $class == "ArithmeticOperator" or $class == "KeywordElse" or $class == "KeywordIf" or $class == "LogicOperator") {
+            if ($class == "Keyword" or $class == "ArithmeticOperator" or $class == "KeywordElse" or $class == "KeywordIf") {
                 //mendapatkan parent dari token
                 $keyParent = array_search($token, $grammar_child);
                 $parent = $grammar_parent[$keyParent];
@@ -79,6 +85,21 @@ class ChangeToken extends CI_Model
                 if (isset($this->array_change[$parent])) {
                     $cleanToken[$key]['token'] = $this->array_change[$parent];
                 }
+              } elseif ($class == "LogicOperator") {
+             switch ($token) {
+                 case 'dan':
+                     $cleanToken[$key]['token'] = 'and';
+                     break;
+                 case 'atau':
+                     $cleanToken[$key]['token'] = 'or';
+                     break;
+                 default:
+                     $cleanToken[$key]['token'] = $token;
+                     break;
+             }
+            } elseif ($class == "ArithmeticOperator2") {
+              $cleanToken[$key]['token'] = '=';
+              $jika_samadengan = 0;
             } elseif ($class == '.') {
                 $cleanToken[$key]['token'] = ';';
             } elseif ($class == 'Number') {
@@ -87,7 +108,7 @@ class ChangeToken extends CI_Model
             }
         }
 
-        return $cleanToken;
+        return $cleanToken;        
     }
 
     function get_grammar_NL()

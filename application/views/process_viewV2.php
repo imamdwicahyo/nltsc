@@ -13,7 +13,7 @@
     <body>
         <div class="container">
 			<h3 class="text-center"></h3>
-			
+
 			<!-- begin : input text -->
             <div class="card border-primary">
                 <h5 class="card-header text-center">Masukkan</h5>
@@ -251,7 +251,7 @@
 																				<?php $num++; ?>
 																			<?php endforeach; ?>
 																		<?php endif; ?>
-                                                                        
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -265,7 +265,7 @@
 								</div>
 								<!-- end : Analisis -->
 								<br>
-								
+
                                 <!-- begin : Translasi -->
                                 <?php if ($parsing['diterima'] != TRUE): ?>
 									<script language='javascript'>alert('Parsing Ditolak!');</script>
@@ -515,7 +515,8 @@
 																								<h5 class="card-title">Sesudah</h5>
 																								<?php if($codeInsertion['diterima'] == False) : ?>
 																									<font color="red">
-																										Penyesuaian Bahasa Pascal Ditolak, Harap Periksa Kembali Grammar Pascalnya
+																										<!-- Penyesuaian Bahasa Pascal Ditolak, Harap Periksa Kembali Grammar Pascalnya -->
+                                                    <?= $codeInsertion['message']  ?>
 																									</font>
 																									<?php else : ?>
 																										<table class="table">
@@ -561,7 +562,7 @@
 																							Penyesuaian Bahasa Pascal Ditolak, Harap Periksa Kembali Grammar Pascalnya
 																						</font>
 																					<?php endif; ?>
-                                                                                    
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>

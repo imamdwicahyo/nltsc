@@ -19,7 +19,7 @@ class CodeInsertion2 extends CI_Model
 
     // inisialisasi variabel lainnya
     var $diterima = 0;
-    var $max_loop = 100000;
+    var $max_loop = 10000000;
     var $key_token = 0;
     var $end_result = 0;
     var $list_token = array();
@@ -160,7 +160,7 @@ class CodeInsertion2 extends CI_Model
         $data = array(
             'diterima' => $this->diterima,
             'loop' => $count_loop,
-            'message' => $mesage,
+            'message' => $this->create_message(),
             'result' => $this->result,
             'temp' => $this->temp_result,
             // 'token' => $this->list_token,
@@ -319,8 +319,10 @@ class CodeInsertion2 extends CI_Model
     /** Menambahkan grammar yang didapat dari hasil scanning */
     public function add_grammar_from_scanning($scanning, $class, $parent_name = NULL)
     {
+
         $temp_child = array();
         $list_name_class = explode(",", $class);
+        //ambil programident dan varident
         foreach ($list_name_class as $key => $name_class) {
             foreach ($scanning as $key => $value) {
                 if ($value['class'] == $name_class) {

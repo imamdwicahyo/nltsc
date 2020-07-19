@@ -23,6 +23,7 @@ class Process2 extends CI_Controller
 
 	function index()
 	{
+		set_time_limit(300);
 
 		$input = "";
 		$data = [];
@@ -51,8 +52,8 @@ class Process2 extends CI_Controller
 
 			//menggunakan fungsi scanning untuk memecah text kedalah class
 			$scanning = $mScanning->process($filtering);
-			$data['scanning'] = $scanning;
-			
+			$data['scanning'] = $scanning;			
+
 			//menggunakan fungsi parser untuk mengecek urutan token
 			$parsing = $parsing->process($scanning);
 			$data['parsing'] = $parsing;
@@ -63,24 +64,23 @@ class Process2 extends CI_Controller
 			if ($parsing['diterima'] == '1') {
 				$cleanToken = $removeAdditionalToken->process($parsing['scanning']);
 				$data['cleanToken'] = $cleanToken;
-
+			
 				$changeToken = $changeToken->process($cleanToken);
-				$data['changeToken'] = $changeToken;
+				$data['changeToken'] = $changeToken;				
 
 				$shortToken = $shortToken->process($changeToken);
 				$data['shortToken'] = $shortToken;
-
+				
 				$codeInsertion = $codeInsertion->process($shortToken);
 				$data['codeInsertion'] = $codeInsertion;
 				// var_dump($codeInsertion);die;
 
 				$tdying = $tidyingToken->process($codeInsertion['result']);
-				$data['tdying'] = $tdying;
+				$data['tdying'] = $tdying;				
 			}
 
-			// echo "$tdying";
 		}
-		
+
 		$data['input'] = $input;
 		$data['status_parsing'] = TRUE;
 		$this->load->view('process_viewV2', $data);
