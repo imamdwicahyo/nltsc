@@ -41,6 +41,7 @@ class ParsingV2 extends CI_Model
         // menambahkan grammar hasil dari scanning
         $this->add_grammar_from_scanning($input, 'ProgramIdent', 'PROGRAM_IDENT');
         $this->add_grammar_from_scanning($input, 'VariableIdent', 'IDENT_VAR');
+        $this->add_grammar_from_scanning($input, 'ConstIdent', 'IDENT_CONST');
         $this->add_grammar_from_scanning($input, 'String', 'STRING');
         $this->add_grammar_from_scanning($input, 'Number', 'NUMBER');
 

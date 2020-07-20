@@ -13,6 +13,7 @@ class ChangeToken extends CI_Model
     var $array_change = array(
         'PROGRAM_KEYWORD' => 'program',
         'VAR_KEYWORD' => 'var',
+        'CONST_KEYWORD' => 'const',
         'KEYWORD_DATA_TYPE' => ':',
         'INPUT_OPR' => ':=',
         'MULTIPLICATION_OPR' => '*',
@@ -70,6 +71,10 @@ class ChangeToken extends CI_Model
         }
 
         $jika_samadengan = 0;
+       //var_dump($grammar_child);die();
+        //var_dump($cleanToken[0]['token']);die();
+
+
         foreach ($cleanToken as $key => $value) {
             $token = $value['token'];
             $class = $value['class'];
@@ -83,8 +88,13 @@ class ChangeToken extends CI_Model
                 $keyParent = array_search($token, $grammar_child);
                 $parent = $grammar_parent[$keyParent];
 
+                //mengubah inputoperator jika sedang inisialisasi constanta
                 if (isset($this->array_change[$parent])) {
+                    if ($key>0 && $cleanToken[$key-1]['class']== "ConstIdent") {
+                        $cleanToken[$key]['token'] = "=";
+                    } else {
                     $cleanToken[$key]['token'] = $this->array_change[$parent];
+                    }
                 }
               } elseif ($class == "LogicOperator") {
              switch ($token) {
