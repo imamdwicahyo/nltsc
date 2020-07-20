@@ -49,9 +49,11 @@ class CodeInsertion2 extends CI_Model
         $this->create_grammar();
 
         // menambahkan grammar hasil dari scanning
-        $this->add_grammar_from_scanning($input, 'ProgramIdent,VariableIdent', 'IDENTIFIER');
+        $this->add_grammar_from_scanning($input, 'ProgramIdent,ConstIdent,VariableIdent', 'IDENTIFIER');
         $this->add_grammar_from_scanning($input, 'String', 'STRING');
         $this->add_grammar_from_scanning($input, 'Number', 'NUMBER');
+
+        //var_dump($this->grammar_parent);die();
 
         // masukan rule(child) dengan parent 'START' pada stack
         $key = array_search("PROGRAM_MODULE", $this->grammar_parent); //cari key dari grammar parent
@@ -164,8 +166,8 @@ class CodeInsertion2 extends CI_Model
             'message' => $this->create_message(),
             'result' => $this->result,
             'temp' => $this->temp_result,
-            // 'token' => $this->list_token,
-            // 'stack' => $this->stack,
+             'token' => $this->list_token,
+             'stack' => $this->stack,
         );
 
         $this->restore_variables(); //mengembalikan isi variabel ke semula
@@ -349,11 +351,14 @@ class CodeInsertion2 extends CI_Model
                 }
             }
         }
+
         //pastikan tidak ada token yang sama
         $temp_child = array_unique($temp_child);
+        //var_dump($temp_child);die();
 
         //get nama parent
         $name_class = ($parent_name != NULL) ? $parent_name : $name_class;
+        //var_dump($name_class);die();
 
         // masukan ke grammar
         array_push($this->grammar_parent, $name_class);
