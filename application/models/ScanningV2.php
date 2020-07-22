@@ -58,11 +58,38 @@ class ScanningV2 extends CI_Model
                     ) {
                         array_push($token_variabel, $list_kata[$i]);
                     }
-                    $i++;
+                    $i++;   
                 }
                 break;
             }
         }
+
+
+        //mengambil token konstanta
+        $token_konstanta = [];
+        foreach ($list_kata as $id => $value) {
+            if ($value == 'konstanta' || $value == 'kons') {
+                $i = $id;
+                while ($list_kata[$i] != '.' && $i < 20) {
+                    if ((in_array($list_kata[$i], $list_token) == false) &&
+                        ($list_kata[$i] != '.') &&
+                        ($list_kata[$i] != ',') &&
+                        ($list_kata[$i] != 'sama') &&
+                        ($list_kata[$i] != 'bernilai') &&
+                        ($list_kata[$i-1] != 'bernilai') &&
+                        ($list_kata[$i-2] != 'sama' && $list_kata[$i-1] != 'dengan') &&
+                        ($list_kata[$i] != "")
+                    ) {
+                        array_push($token_konstanta, $list_kata[$i]);
+                    }
+                    $i++;   
+                }
+                break;
+            }
+        }
+        //var_dump($token_konstanta);die();
+
+        //var_dump($token_konstanta);die();
 
         //mengklasifikasikan kata kedalam class class
         $id = 0;
@@ -223,9 +250,12 @@ class ScanningV2 extends CI_Model
                   'class' => $class);
 
                 // untuk menentukan apakah kata 'dan' itu additional token atau logic operator
-                if ($token == "dan" and in_array($list_kata[$id - 1], $token_variabel) and in_array($list_kata[$id + 1], $token_variabel)) {
+                if (($token == "dan" and in_array($list_kata[$id - 1], $token_variabel) and in_array($list_kata[$id + 1], $token_variabel))
+                    || ($token == "dan" and in_array($list_kata[$id - 1], $token_konstanta) and in_array($list_kata[$id + 1], $token_konstanta))
+                    || ($token == "dan" and in_array($list_kata[$id - 1], $token_variabel) and in_array($list_kata[$id + 1], $token_konstanta))
+                    || ($token == "dan" and in_array($list_kata[$id - 1], $token_konstanta) and in_array($list_kata[$id + 1], $token_variabel))) {
                     $class = "AdditionalToken";
-                }
+                } 
                 $end_result = count($result_scanning) - 1;
                 if ($token == "dan" and count($result_scanning > 0) and $result_scanning[$end_result]['class'] == "Keyword") {
                     $class = "AdditionalToken";
@@ -243,6 +273,13 @@ class ScanningV2 extends CI_Model
                 $temp = array(
                     'token' => $list_kata[$id],
                     'class' => 'VariableIdent'
+                );
+                array_push($result_scanning, $temp);
+                $id++;
+            } elseif (in_array($list_kata[$id], $token_konstanta)) {
+                $temp = array(
+                    'token' => $list_kata[$id],
+                    'class' => 'ConstIdent'
                 );
                 array_push($result_scanning, $temp);
                 $id++;

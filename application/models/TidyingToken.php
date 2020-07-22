@@ -26,7 +26,9 @@ class TidyingToken extends CI_Model
         $expl_code = explode('<br>', $impl_code);
         foreach ($expl_code as $key => $value) {
             $bantu = trim($value);
-            if ($bantu == 'var') {
+            if ($bantu == 'const') {
+                $expl_code[$key + 1] = " &nbsp; &nbsp; " . $expl_code[$key + 1];
+            } elseif ($bantu == 'var') {
                 $expl_code[$key + 1] = " &nbsp; &nbsp; " . $expl_code[$key + 1];
             } elseif ($bantu == 'begin') {
                 $expl_code[$key] = implode(" ", $tab) . $expl_code[$key];

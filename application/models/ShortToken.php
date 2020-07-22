@@ -24,6 +24,15 @@ class ShortToken extends CI_Model
             }
         }
 
+        //mendapatkan list const
+        foreach ($changeToken as $key => $value) {
+            if ($value['class'] == 'ConstIdent') {
+                if (in_array($value['token'], $varList) == false) {
+                    array_push($varList, $value['token']);
+                }
+            }
+        }
+
         //jika ada urutan operator yang salah
         //misalkan bagi 5 dengan 2 ==> harusnya 5 bagi 2
         //maka tukar urutannya menjadi 5 bagi 2
@@ -31,7 +40,7 @@ class ShortToken extends CI_Model
         $class_container = '';
         foreach ($changeToken as $key => $value) {
             if (in_array($value['token'], $operator)) {
-                if ((($changeToken[$key - 1]['class'] != 'VariableIdent') && ($changeToken[$key - 1]['class'] != 'Number') && ($changeToken[$key - 1]['class'] != 'String') && ($changeToken[$key - 1]['class'] != ')'))) {
+                if ((($changeToken[$key - 1]['class'] != 'VariableIdent') && ($changeToken[$key - 1]['class'] != 'ConstIdent') && ($changeToken[$key - 1]['class'] != 'Number') && ($changeToken[$key - 1]['class'] != 'String') && ($changeToken[$key - 1]['class'] != ')'))) {
                     // membetulkan posisi eksprsi
                     $token_container = $changeToken[$key + 1]['token'];
                     $class_container = $changeToken[$key + 1]['class'];
@@ -50,7 +59,7 @@ class ShortToken extends CI_Model
         $a = 0;
         // proses agar posisi " var := number + number "
         while (($cursor + 1) != $max && $a < 50) {
-            if (($changeToken[$cursor]['class'] == 'VariableIdent') || ($changeToken[$cursor]['class'] == 'Number') || ($changeToken[$cursor]['class'] == 'String')) {
+            if (($changeToken[$cursor]['class'] == 'VariableIdent') || ($changeToken[$cursor]['class'] == 'ConstIdent') || ($changeToken[$cursor]['class'] == 'Number') || ($changeToken[$cursor]['class'] == 'String')) {
                 //jika class yang di cek adalah VariableIdent/Number/String maka lakukan perintah berikut
                 if ((in_array($changeToken[$cursor + 1]['token'], $operator))) {
                     //jika token selanjutnya adalah operator
