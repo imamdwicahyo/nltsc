@@ -27,8 +27,13 @@
 										<textarea rows="8" class="form-control" name="input" placeholder="Algoritma Deskriptif"><?php if(isset($input)){echo "$input";}?></textarea>
 										<br>
 										<div class="row justify-content-between">
-											<div class="col-10">
+											<div class="col-8">
 												<input type="file" class="form-control-file" name="file_algoritma">
+											</div>
+											<div class="col-2">
+												<a href="<?= base_url() ?>">
+													<button type="button" class="btn btn-info btn-block" name="proses">Reset</button>
+												</a>
 											</div>
 											<div class="col-2">
 												<button type="submit" class="btn btn-primary btn-block" name="proses">Proses</button>
