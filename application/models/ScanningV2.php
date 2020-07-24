@@ -47,9 +47,9 @@ class ScanningV2 extends CI_Model
         //mendapatkan token variabel
         $token_variabel = [];
         foreach ($list_kata as $id => $value) {
-            if ($value == 'variabel' || $value == 'var') {
+            if ($value == 'variabel' || $value == 'var' || $value == 'input' || $value == 'output') {
                 $i = $id;
-                while ($list_kata[$i] != '.' && $i < 20) {
+                while ($list_kata[$i] != '.') {
                     if ((in_array($list_kata[$i], $list_token) == false) &&
                         ($list_kata[$i] != '.') &&
                         ($list_kata[$i] != ',') &&
@@ -60,9 +60,8 @@ class ScanningV2 extends CI_Model
                     }
                     $i++;   
                 }
-                break;
             }
-        }
+		}
 
 
         //mengambil token konstanta
@@ -290,7 +289,11 @@ class ScanningV2 extends CI_Model
                     $temp = array('token' => $list_kata[$id], 'class' => 'ProgramIdent');
                     array_push($result_scanning, $temp);
                     $id++;
-                } else {
+                } if ($id > 1 and ($list_kata[$id - 1] == 'fungsi')) {
+                    $temp = array('token' => $list_kata[$id], 'class' => 'ProgramIdent');
+                    array_push($result_scanning, $temp);
+					$id++;
+				} else {
                     if ($id > 0) {
                         $last = end($result_scanning);
                     }
