@@ -134,7 +134,7 @@ class Accuration extends CI_Controller
 			'benar' => $benar,
 			'salah' => $salah,
 			'total' => $total_data_uji,
-			'akurasi' => $benar / $total_data_uji * 100,
+			'akurasi' => round($benar / $total_data_uji * 100,2),
 			'time' => $time_elapsed_secs,
 		);
 

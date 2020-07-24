@@ -41,7 +41,7 @@
 											<br><br>
 											<a href="lihat-kelas-token.php" class="btn btn-outline-secondary">Kelas Token</a>
 											<br><br>
-											<a href="lihat-akurasi.php" class="btn btn-outline-secondary">Uji Akurasi</a>
+											<a href="<?= base_url('accuration') ?>" class="btn btn-outline-secondary">Uji Akurasi</a>
 										</div>
 									</td>
                                 </tr>
