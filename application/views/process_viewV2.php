@@ -39,7 +39,7 @@
 										<div class="col-10">
 											<a href="<?= base_url('grammar') ?>" class="btn btn-outline-secondary">Grammar</a>
 											<br><br>
-											<a href="lihat-kelas-token.php" class="btn btn-outline-secondary">Kelas Token</a>
+											<a href="<?= base_url('kelas_token') ?>" class="btn btn-outline-secondary">Kelas Token</a>
 											<br><br>
 											<a href="<?= base_url('accuration') ?>" class="btn btn-outline-secondary">Uji Akurasi</a>
 										</div>
