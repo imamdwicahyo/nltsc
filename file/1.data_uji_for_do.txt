@@ -7,7 +7,6 @@ BUAT program uji6. buat variabel i, j dan k dengan tipe data integer. untuk iter
 Buat aplikasi uji7. buat variabel a dan i dengan tipe data bilangan bulat. i bernilai 3. untuk i sama dengan 1 sampai 10 maka tampilkan Hello.
 BUAT program uji8. buat variabel i dengan tipe data integer. untuk iterasi 1 sampai 10 pada i maka tampilkan 1, 2 atau 3.
 Buat aplikasi uji9. buat variabel i dan j dengan tipe data bilangan bulat. untuk 1 sampai 10 pada i maka untuk 1 sampai 10 pada j maka tampilkan bisa.
-Buat aplikasi uji10. buat variabel i, j dan k dengan tipe data bilangan bulat. untuk 1 sampai 10 pada i maka untuk 1 sampai 10 pada j maka untuk 1 sampai 10 pada k maka tampilkan benar,
 buat program uji31, buat variabel x dengan tipe data string dan y dengan tipe data integer. x bernilai akan terulang. untuk y sama dengan 1 sampai 10 maka tampilkan x.
 buat aplikasi uji32. buat variabel a dengan tipe data bilangan bulat. untuk a sama dengan 9 menurun 1 maka tampilkan menurunkan.
 buat program uji33, buat variabel x dengan tipe data string dan y dengan tipe data integer. baca nilai x. untuk y sama dengan 1 sampai 5 maka tampilkan x.
@@ -16,5 +15,5 @@ buat aplikasi uji35. buat variabel y dan x dengan tipe data bilangan bulat. baca
 buat aplikasi uji36. buat variabel y dengan tipe data pecahan dan x dengan tipe data bilangan bulat. untuk x sama dengan 7 menurun 2 maka y sama dengan 3 dibagi x lalu tampilkan y.
 buat aplikasi uji37. buat variabel y dan z dengan tipe data integer dan x dengan tipe data real. z bernilai 3. untuk y sama dengan 4 sampai 8 maka y sama dengan 3 ditambah z lalu x sama dengan y dibagi z. tampilkan x.
 buat aplikasi uji38. buat variabel i dan j dengan tipe data bilangan bulat dan k dengan tipe data string. k bernilai aku siap. untuk 1 sampai 10 pada i maka untuk 1 sampai 10 pada j maka tampilkan nilai k.
-buat aplikasi uji39. buat variabel x dan y dengan tipe data integer. untuk 1 sampai 5 pada x maka untuk 9 menurun 6 pada y maka tampilkan naik turun,
+buat aplikasi uji39. buat variabel x dan y dengan tipe data integer. untuk 1 sampai 5 pada x maka untuk 9 menurun 6 pada y maka tampilkan naik turun.
 buat aplikasi uji40. buat variabel i dan j dengan tipe data integer. untuk 4 menurun 1 pada i maka untuk 8 menurun 2 pada j maka tampilkan turun turun.

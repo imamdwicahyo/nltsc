@@ -19,7 +19,7 @@ class ParsingV2 extends CI_Model
 
     // inisialisasi variabel lainnya
     var $diterima = 0;
-    var $max_loop = 100000;
+    var $max_loop = 1000000;
     var $key_token = 0;
     var $list_token = array();
     var $max_token_success = 0;
@@ -139,7 +139,7 @@ class ParsingV2 extends CI_Model
         $this->grammar_parent = array();
         $this->grammar_child = array();
         $this->diterima = 0;
-        $this->max_loop = 100000;
+        $this->max_loop = 800000;
         $this->key_token = 0;
         $this->list_token = array();
         $this->max_token_success = 0;

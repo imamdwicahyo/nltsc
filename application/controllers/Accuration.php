@@ -42,6 +42,7 @@ class Accuration extends CI_Controller
 
 	function proses_NLP($list_input, $list_hope)
 	{
+		$start = microtime(true); // time start
 		$data = [];
 
 		//inisialisasi
@@ -57,71 +58,84 @@ class Accuration extends CI_Controller
 		$result = array();
 		$benar = 0;
 		$salah = 0;
+		$total_data_uji = 0;
 		foreach ($list_input as $key => $input) {
-			//menggunakan fungsi casefolding untuk mendapatkan teks dengan huruf kecil
-			$casefolding = $mPrepocessing->casefolding($input);
-			$data['casefolding'] = $casefolding;
+			if ($input != "") {
+				$single_start = microtime(true); // time start
 
-			//menggunakan fungsi filtering untuk menghapus karakter yg tdk diperlukan
-			$filtering = $mPrepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/]/");
-			$data['filtering'] = $filtering;
+				//menggunakan fungsi casefolding untuk mendapatkan teks dengan huruf kecil
+				$casefolding = $mPrepocessing->casefolding($input);
+				$data['casefolding'] = $casefolding;
 
-			//menggunakan fungsi scanning untuk memecah text kedalah class
-			$scanning = $mScanning->process($filtering);
-			$data['scanning'] = $scanning;
+				//menggunakan fungsi filtering untuk menghapus karakter yg tdk diperlukan
+				$filtering = $mPrepocessing->filtering($casefolding, "/[^A-Za-z0-9\ \_\.\,\+\-\(\)\*\/]/");
+				$data['filtering'] = $filtering;
 
-			//menggunakan fungsi parser untuk mengecek urutan token
-			$parsing = $mParsing->process($scanning);
-			$data['parsing'] = $parsing;
-			// var_dump($parsing);
-			// die;
+				//menggunakan fungsi scanning untuk memecah text kedalah class
+				$scanning = $mScanning->process($filtering);
+				$data['scanning'] = $scanning;
 
-			$tdying = "";
-			if ($parsing['diterima'] == '1') {
-				$cleanToken = $mRemoveAdditionalToken->process($parsing['scanning']);
-				$data['cleanToken'] = $cleanToken;
+				//menggunakan fungsi parser untuk mengecek urutan token
+				$parsing = $mParsing->process($scanning);
+				$data['parsing'] = $parsing;
+				// var_dump($parsing);
+				// die;
 
-				$changeToken = $mChangeToken->process($cleanToken);
-				$data['changeToken'] = $changeToken;
+				$tdying = "";
+				if ($parsing['diterima'] == '1') {
+					$cleanToken = $mRemoveAdditionalToken->process($parsing['scanning']);
+					$data['cleanToken'] = $cleanToken;
 
-				$shortToken = $mShortToken->process($changeToken);
-				$data['shortToken'] = $shortToken;
+					$changeToken = $mChangeToken->process($cleanToken);
+					$data['changeToken'] = $changeToken;
 
-				$codeInsertion = $mCodeInsertion->process($shortToken);
-				$data['codeInsertion'] = $codeInsertion;
+					$shortToken = $mShortToken->process($changeToken);
+					$data['shortToken'] = $shortToken;
 
-				$tdying = $mTidyingToken->process($codeInsertion['result']);
-				$data['tdying'] = $tdying;
+					$codeInsertion = $mCodeInsertion->process($shortToken);
+					$data['codeInsertion'] = $codeInsertion;
+
+					$tdying = $mTidyingToken->process($codeInsertion['result']);
+					$data['tdying'] = $tdying;
+				}
+				$hope  = preg_replace('/[\n\r]/', '', $list_hope[$key]);
+				$hope2 = $mTidyingToken->process(explode(" ", $hope));
+
+				if ($hope2 == $tdying) {
+					$status = "benar";
+					$benar++;
+				} else {
+					$status = "salah";
+					$salah++;
+				}
+
+				$single_time_elapsed_secs = microtime(true) - $single_start; //time end
+
+				$loop_insertion = 0;
+				if (isset($codeInsertion)) {
+					$loop_insertion = $codeInsertion['loop'];
+				}
+				$temp = array(
+					'kalimat' => $input . "(" . $parsing['loop'] . ")",
+					'harapan' => $hope2,
+					'hasil'   => $tdying . "(" . $loop_insertion . ")",
+					'status'  => $status,
+					'time'	  => $single_time_elapsed_secs,
+				);
+				array_push($result, $temp);
+
+				$total_data_uji++;
 			}
-			$hope  = preg_replace('/[\n\r]/', '', $list_hope[$key]);
-			$hope2 = $mTidyingToken->process(explode(" ", $hope));
-
-			if ($hope2 == $tdying) {
-				$status = "benar";
-				$benar++;
-			} else {
-				$status = "salah";
-				$salah++;
-			}
-
-			$loop_insertion = 0;
-			if (isset($codeInsertion)) {
-				$loop_insertion = $codeInsertion['loop'];
-			}
-			$temp = array(
-				'kalimat' => $input."(".$parsing['loop'].")",
-				'harapan' => $hope2,
-				'hasil'   => $tdying."(".$loop_insertion.")",
-				'status'  => $status,
-			);
-			array_push($result, $temp);
 		}
+
+		$time_elapsed_secs = microtime(true) - $start; //time end
 
 		$hasil_uji = array(
 			'benar' => $benar,
 			'salah' => $salah,
-			'total' => count($list_input),
-			'akurasi' => $benar / count($list_input) * 100,
+			'total' => $total_data_uji,
+			'akurasi' => $benar / $total_data_uji * 100,
+			'time' => $time_elapsed_secs,
 		);
 
 		$data = array(
