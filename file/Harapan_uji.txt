@@ -1,0 +1,30 @@
+program uji1 ; var i : integer ; begin for i := 1 to 10 do begin writeln ('perulangan sedang berlangsung') ; end ; readln; end.
+program uji2 ; var i : integer ; begin writeln ('program dimulai ') ; for i := 1 to 10 do begin writeln ('perulangan sedang berlangsung ') ; end ; writeln ('program selesai') ; readln; end.
+program uji3 ; var j : integer ; begin for j := 1 to 5 do begin writeln ( j ) ; end ; writeln ('program sampai disini') ; readln; end.
+program uji4 ; var x : integer ; y : real ; begin for x := 1 to 10 do begin readln ( y ) ; y := sqrt ( y ) ; writeln ( y ) ; end ; readln; end.
+program uji5 ; var x , y : integer ; begin for x := 1 to 10 do begin writeln ('perulangan yang pertama ') ; end ; for y := 1 to 10 do begin writeln ('perulangan kedua') ; end ; readln; end.
+program uji6 ; var x , y : integer ; begin for x := 1 to 10 do begin writeln ('perulangan yang pertama ') ; end ; for y := 1 to 10 do begin writeln ('perulangan kedua ') ; writeln ( y ) ; end ; readln; end.
+program uji7 ; var x : integer ; s : string ; begin s := 'pengujian ' ; for x := 1 to 10 do begin writeln ( s , x ) ; end ; readln; end.
+program uji8 ; var x , y : integer ; begin for x := 1 to 10 do begin for y := 1 to 5 do begin writeln ('perulangan dalam perulangan') ; end ; end ; readln; end.
+program uji9 ; var x , y : integer ; begin for x := 1 to 10 do begin writeln ('perulangan pertama ') ; for y := 1 to 5 do begin writeln ('perulangan dalam perulangan') ; end ; end ; readln; end.
+program uji10 ; var x , y : integer ; begin for x := 1 to 10 do begin for y := 1 to 5 do begin writeln ('perulangan dalam perulangan ') ; end ; writeln ('perulangan kedua selesai') ; end ; readln; end.
+program uji11 ; var x , y : integer ; begin for x := 1 to 10 do begin for y := 1 to 5 do begin writeln ('perulangan dalam perulangan ') ; end ; writeln ('perulangan kedua selesai ') ; end ; writeln ('program selesai sampai disini') ; readln; end.
+program uji12 ; var x , y : integer ; begin readln ( y ) ; for x := 1 to 10 do begin while y < 5 do begin writeln ('program jalan ') ; y := 1 + y ; end ; end ; readln; end.
+program uji13 ; var i : integer ; begin readln ( i ) ; while i < 10 do begin writeln ('dalam perulangan ') ; i := i + 1 ; end ; readln; end.
+program uji14 ; var i : integer ; begin writeln ('program dimulai ') ; readln ( i ) ; while i < 10 do begin writeln ('perulangan sedang berlangsung ') ; i := i + 1 ; end ; writeln ('program selesai') ; readln; end.
+program uji15 ; var j : integer ; begin readln ( j ) ; while j < 5 do begin writeln ( j ) ; j := j + 1 ; end ; writeln ('program sampai disini') ; readln; end.
+program uji16 ; var x : integer ; y : real ; begin readln ( x ) ; while x < 10 do begin readln ( y ) ; y := sqrt ( y ) ; writeln ( y ) ; x := x + 1 ; end ; readln; end.
+program uji17 ; var x : integer ; s : string ; begin s := 'pengujian ' ; readln ( x ) ; while x <= 10 do begin writeln ( s , x ) ; x := x + 1 ; end ; readln; end.
+program uji18 ; var x , y : integer ; begin readln ( x ) ; readln ( y ) ; while x < 10 do begin while y < 10 do begin writeln ('perulangan dalam perulangan ') ; y := y + 1 ; end ; y := y + 1 ; end ; readln; end.
+program uji19 ; var a , b : integer ; begin writeln ('masukan angka ') ; readln ( a ) ; b := a ; while a <= b + 10 do begin writeln ('akar dari a adalah ') ; writeln ( sqrt ( a ) ) ; writeln ('nilai log dari a adalah ') ; writeln ( ln ( a ) ) ; a := a + 1 ; end ; readln; end.
+program uji20 ; var x , y : integer ; begin writeln ('masukan angka ') ; readln ( x ) ; writeln ('berikut adalah bilangan kelipatan dua ') ; while x < 100 do begin writeln ( x ) ; x := x * 2 ; end ; writeln ('program selesai') ; readln; end.
+program uji21 ; var i : integer ; begin readln ( i ) ; repeat begin writeln ('perulangan sedang berlangsung ') ; i := i + 1 ; end ; until i > 10 ; readln; end.
+program uji22 ; var i : integer ; begin writeln ('program dimulai ') ; readln ( i ) ; repeat begin writeln ('perulangan sedang berlangsung ') ; i := i + 1 ; end ; until i > 10 ; writeln ('program selesai') ; readln; end.
+program uji23 ; var j : integer ; begin readln ( j ) ; repeat begin writeln ( j ) ; j := j + 1 ; end ; until j > 50 ; writeln ('program sampai disini') ; readln; end.
+program uji24 ; var x : integer ; y : real ; begin readln ( x ) ; repeat begin readln ( y ) ; y := sqrt ( y ) ; writeln ( y ) ; x := 1 + x ; end ; until x > 5 ; readln; end.
+program uji25 ; var x , y : integer ; begin readln ( x ) ; repeat begin writeln ('perulangan pertama ') ; x := x + 1 ; end ; until x > 10 ; readln ( y ) ; repeat begin writeln ('perulangan ke dua ') ; y := 1 + y ; end ; until y > 10 ; readln; end.
+program uji26 ; var x , y : integer ; begin readln ( x ) ; repeat begin writeln ('perulangan yang pertama ') ; x := x + 1 ; end ; until x > 10 ; readln ( y ) ; repeat begin writeln ('perulangan kedua ') ; writeln ( y ) ; y := y + 1 ; end ; until y > 10 ; readln; end.
+program uji27 ; var x : integer ; s : string ; begin s := 'pengujian ' ; readln ( x ) ; repeat begin writeln ( s , x ) ; x := x + 1 ; end ; until x > 10 ; readln; end.
+program uji28 ; var x , y : integer ; begin readln ( x ) ; readln ( y ) ; repeat begin for y := 1 to 5 do begin writeln ('perulangan dalam perulangan ') ; end ; x := x + 1 ; end ; until x > 10 ; readln; end.
+program uji29 ; var x , y , z : integer ; begin readln ( x ) ; readln ( y ) ; for x := 1 to 10 do begin repeat begin z := x * y ; writeln ( z ) ; y := y + 1 ; end ; until y > 10 ; end ; readln; end.
+program uji30 ; var x , y : integer ; begin readln ( x ) ; while x < 10 do begin readln ( y ) ; repeat begin writeln ('imam') ; y := y + 1 ; end ; until y > 10 ; x := x + 1 ; end ; writeln ('program selesai') ; readln; end.

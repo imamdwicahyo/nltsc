@@ -22,25 +22,61 @@ class Accuration extends CI_Controller
 
 	function index()
 	{
-		// input file data uji
-		$file_data_uji = fopen(base_url() . "file/1.data_uji_for_do.txt", "r") or die("Unable to open file!");
-		$list_data_uji 	=  fread($file_data_uji, 100000);
-		fclose($file_data_uji);
+		set_time_limit(300);
+		$start = microtime(true); // time start
 
-		// input file data harapan
-		$harapan_data_uji = fopen(base_url() . "file/1.harapan_uji_for_do.txt", "r") or die("Unable to open file!");
-		$list_harapan_uji 	=  fread($harapan_data_uji, 100000);
-		fclose($harapan_data_uji);
+		$hasil_uji = array();
+		$file = array(
+			array('judul'=>"Variasi operasi perulangan",'file_uji'=> "Data_uji.txt",'file_harapan'=>"Harapan_uji.txt"),
+		);
+		// $file = array(
+		// 	array('judul' => "For Do", 'file_uji' => "1.data_uji_for_do.txt", 'file_harapan' => "1.harapan_uji_for_do.txt"),
+		// 	array('judul' => "While Do", 'file_uji' => "2.data_uji_while_do.txt", 'file_harapan' => "2.harapan_uji_while_do.txt"),
+		// );
 
-		$list_input = explode("\n", $list_data_uji);
-		$list_hope = explode("\n", $list_harapan_uji);
+		$benar = 0;
+		$salah = 0;
+		$total = 0;
+		foreach ($file as $key => $value) {
+			// input file data uji
+			$file_data_uji = fopen(base_url() . "file/" . $value['file_uji'], "r") or die("Unable to open file!");
+			$list_data_uji 	=  fread($file_data_uji, 100000);
+			fclose($file_data_uji);
 
-		$result = $this->proses_NLP($list_input, $list_hope);
+			// input file data harapan
+			$harapan_data_uji = fopen(base_url() . "file/" . $value['file_harapan'], "r") or die("Unable to open file!");
+			$list_harapan_uji 	=  fread($harapan_data_uji, 100000);
+			fclose($harapan_data_uji);
 
-		$this->load->view('accuration_view', $result);
+			$list_input = explode("\n", $list_data_uji);
+			$list_hope = explode("\n", $list_harapan_uji);
+
+			$result = $this->proses_NLP($list_input, $list_hope, $value['judul']);
+			$benar = $benar + $result['hasil_uji']['benar'];
+			$salah = $salah + $result['hasil_uji']['salah'];
+			$total = $total + $result['hasil_uji']['total'];
+
+			array_push($hasil_uji, $result);
+		}
+
+		$time_elapsed_secs = microtime(true) - $start; //time end
+		$result_total = array(
+			'benar' => $benar,
+			'salah' => $salah,
+			'total' => $total,
+			'akurasi' => round($benar/$total,2),
+			'time' => $time_elapsed_secs,
+		);
+
+		$data = array(
+			'hasil_uji_keseluruhan' => $result_total,
+			'hasil_uji_single' => $hasil_uji,
+		);
+
+		$this->load->view('accuration_view', $data);
 	}
 
-	function proses_NLP($list_input, $list_hope)
+	function proses_NLP($list_input, $list_hope, $nama_uji)
 	{
 		$start = microtime(true); // time start
 		$data = [];
@@ -131,10 +167,11 @@ class Accuration extends CI_Controller
 		$time_elapsed_secs = microtime(true) - $start; //time end
 
 		$hasil_uji = array(
+			'judul' => $nama_uji,
 			'benar' => $benar,
 			'salah' => $salah,
 			'total' => $total_data_uji,
-			'akurasi' => round($benar / $total_data_uji * 100,2),
+			'akurasi' => round($benar / $total_data_uji * 100, 2),
 			'time' => $time_elapsed_secs,
 		);
 

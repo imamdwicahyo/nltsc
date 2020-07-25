@@ -1,0 +1,2 @@
+Buat aplikasi uji1. buat variabel a dan i dengan tipe data bilangan bulat. untuk i sama dengan 1 sampai 10 maka baca a.
+BUAT program uji2. buat variabel i dengan tipe data integer. untuk iterasi 1 sampai 10 pada i maka tampilkan "benar".
