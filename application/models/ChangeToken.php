@@ -51,7 +51,11 @@ class ChangeToken extends CI_Model
         'KEYWORD_SQR' => 'sqr',
         'KEYWORD_CASE' => 'case',
         'CHAR' => 'char',
-        'END_LOOP' => 'end',
+		'END_LOOP' => 'end',
+		'BOOLEAN' => 'boolean',
+		'BOOLEAN_TRUE' => 'true',
+		'BOOLEAN_FALSE' => 'false',
+		'EQUALS_OPR' => '=',
     );
 
     function process($cleanToken)
