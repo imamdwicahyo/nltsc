@@ -47,9 +47,9 @@ class ScanningV2 extends CI_Model
         //mendapatkan token variabel
         $token_variabel = [];
         foreach ($list_kata as $id => $value) {
-            if ($value == 'variabel' || $value == 'var' || $value == 'input' || $value == 'output') {
+            if ($value == 'variabel' || $value == 'var') {
                 $i = $id;
-                while ($list_kata[$i] != '.') {
+                while ($list_kata[$i] != '.' && $i < 20) {
                     if ((in_array($list_kata[$i], $list_token) == false) &&
                         ($list_kata[$i] != '.') &&
                         ($list_kata[$i] != ',') &&
@@ -60,8 +60,9 @@ class ScanningV2 extends CI_Model
                     }
                     $i++;   
                 }
+                break;
             }
-		}
+        }
 
 
         //mengambil token konstanta
@@ -98,8 +99,8 @@ class ScanningV2 extends CI_Model
         $tampilkan_atau = 0;
         $tampilkan_bilangan = 0;
         $samadengan_if = 0;
-        $dan_if = 0;
-        $dan_while = 0;
+		$dan_if = 0;
+		$dan_logic_operator = 0;
         
         while ($id < $max) {
             if (is_numeric($list_kata[$id]) || is_numeric(preg_replace('/[,]/', '', $list_kata[$id]))) {
@@ -113,7 +114,8 @@ class ScanningV2 extends CI_Model
                   $tampilkan_ke = 0;
                   $tampilkan_atau = 0;
                   $tampilkan_bilangan = 0;
-                  $dan_if = 0;
+				  $dan_if = 0;
+				  $dan_logic_operator = 0;
                 }
 
                 $temp = array('token' => $list_kata[$id], 'class' => $list_kata[$id]);
@@ -220,7 +222,6 @@ class ScanningV2 extends CI_Model
                     $samadengan_if = 1;
                     $dan_if = 1;
                 }             
-
                 if ($token == "tampilkan") {
                     $tampilkan_ke = 1;
                     $tampilkan_atau = 1;
@@ -242,7 +243,13 @@ class ScanningV2 extends CI_Model
                   $tampilkan_ke = 0;
                   $tampilkan_atau = 0;
                   $tampilkan_bilangan = 0;
-                }
+				}
+				if ($token == 'selama' || $token == 'ketika' || $token == 'sehingga') {
+					$dan_logic_operator = 1;
+				}
+				if ($token == 'maka' || $token == 'lakukan' || $token == 'kerjakan') {
+					$dan_logic_operator = 0;
+				}
 
                 $temp = array(
                   'token' => $token,
@@ -256,7 +263,7 @@ class ScanningV2 extends CI_Model
                     $class = "AdditionalToken";
                 } 
                 $end_result = count($result_scanning) - 1;
-                if ($token == "dan" and count($result_scanning > 0) and $result_scanning[$end_result]['class'] == "Keyword") {
+                if ($token == "dan" and $dan_logic_operator == 0) {
                     $class = "AdditionalToken";
                 }
                 // end untuk menentukan apakah kata 'dan' itu additional token atau logic operator
@@ -289,11 +296,7 @@ class ScanningV2 extends CI_Model
                     $temp = array('token' => $list_kata[$id], 'class' => 'ProgramIdent');
                     array_push($result_scanning, $temp);
                     $id++;
-                } if ($id > 1 and ($list_kata[$id - 1] == 'fungsi')) {
-                    $temp = array('token' => $list_kata[$id], 'class' => 'ProgramIdent');
-                    array_push($result_scanning, $temp);
-					$id++;
-				} else {
+                } else {
                     if ($id > 0) {
                         $last = end($result_scanning);
                     }
@@ -308,8 +311,8 @@ class ScanningV2 extends CI_Model
                         $id++;
                     }
                 }
-            }
-        }
+			}
+		}
         return $result_scanning;
     }
 
