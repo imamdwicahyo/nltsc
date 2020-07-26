@@ -175,7 +175,7 @@ class ScanningV2 extends CI_Model
                 );
                 array_push($result_scanning, $temp);
                 $id = $id + 2;
-            } elseif ($id > 1 and ($list_kata[$id] == 'kalimat') and in_array($list_kata[$id - 1], array('tampil', 'tampilkan'))) {
+            } elseif ($id > 1 and ($list_kata[$id] == 'kalimat' and in_array($list_kata[$id - 1], array('tampil', 'tampilkan','tulis','tuliskan'))) or ($list_kata[$id] == 'kalimat' and $list_kata[$id-2] == 'sama' and $list_kata[$id-1] == 'dengan')) {
                 // masukan token ke result scanning
                 $token = $list_kata[$id];
                 $key = array_search($token, $list_token);
@@ -245,10 +245,10 @@ class ScanningV2 extends CI_Model
                   $tampilkan_bilangan = 0;
 				}
 				if ($token == 'selama' || $token == 'ketika' || $token == 'sehingga') {
-					$dan_logic_operator = 1;
+					$dan_logic_operator = 1;					
 				}
 				if ($token == 'maka' || $token == 'lakukan' || $token == 'kerjakan') {
-					$dan_logic_operator = 0;
+					$dan_logic_operator = 0;					
 				}
 
                 $temp = array(
@@ -256,15 +256,8 @@ class ScanningV2 extends CI_Model
                   'class' => $class);
 
                 // untuk menentukan apakah kata 'dan' itu additional token atau logic operator
-                if (($token == "dan" and in_array($list_kata[$id - 1], $token_variabel) and in_array($list_kata[$id + 1], $token_variabel))
-                    || ($token == "dan" and in_array($list_kata[$id - 1], $token_konstanta) and in_array($list_kata[$id + 1], $token_konstanta))
-                    || ($token == "dan" and in_array($list_kata[$id - 1], $token_variabel) and in_array($list_kata[$id + 1], $token_konstanta))
-                    || ($token == "dan" and in_array($list_kata[$id - 1], $token_konstanta) and in_array($list_kata[$id + 1], $token_variabel))) {
-                    $class = "AdditionalToken";
-                } 
-                $end_result = count($result_scanning) - 1;
                 if ($token == "dan" and $dan_logic_operator == 0) {
-                    $class = "AdditionalToken";
+					$class = "AdditionalToken";
                 }
                 // end untuk menentukan apakah kata 'dan' itu additional token atau logic operator
 
