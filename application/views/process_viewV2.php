@@ -24,7 +24,7 @@
 							<table border="0" width="100%">
                                 <tr>
 									<td width="90%">
-										<textarea rows="8" class="form-control" name="input" placeholder="Algoritma Deskriptif"><?php if(isset($input)){echo "$input";}?></textarea>
+										<textarea id="input_text" rows="8" class="form-control" name="input" placeholder="Algoritma Deskriptif"><?php if(isset($input)){echo "$input";}?></textarea>
 										<br>
 										<div class="row justify-content-between">
 											<div class="col-8">
@@ -36,7 +36,7 @@
 												</a>
 											</div>
 											<div class="col-2">
-												<button type="submit" class="btn btn-primary btn-block" name="proses">Proses</button>
+												<button type="submit" class="btn btn-primary btn-block" name="proses" onclick="click_process()">Proses</button>
 											</div>
 										</div>
 									</td>
@@ -648,5 +648,13 @@
         <script src="<?php  echo base_url() ?>assets/js/jquery-3.3.1.slim.min.js"></script>
         <script src="<?php  echo base_url() ?>assets/js/popper.min.js"></script>
         <script src="<?php  echo base_url() ?>assets/js/bootstrap.min.js"></script>
+		<script>
+		 function click_process(){
+			 var input = document.getElementById("input_text").value;
+			 if (input == "") {
+				 alert("Data masukan belum diisi");
+			 }
+		 }
+		</script>
     </body>
 </html>
